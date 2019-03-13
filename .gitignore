@@ -1,0 +1,7 @@
+bakfiles
+bochsrc.txt
+Makefile
+myos.vhd
+vhd参数.png
+*.bin
+*.o

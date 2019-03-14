@@ -29,7 +29,7 @@ KERNEL	= kernel.bin
 
 ASMOBJS		= kernel/kern_a.o kernel/interrupt_a.o lib/klib_a.o lib/string_a.o
 
-COBJS		= kernel/global.o kernel/main.o kernel/init.o \
+COBJS		= kernel/global.o kernel/kmain.o kernel/init.o \
 				kernel/interrupt_c.o kernel/protect.o kernel/i8259_pic.o \
 				lib/klib_c.o kernel/proc.o
 

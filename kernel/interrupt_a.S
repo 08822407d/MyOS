@@ -57,8 +57,6 @@ undef_exception:
 ; 中断和异常 -- 硬件中断
 ; --------------------------------
 %macro  hwint_master	1
-		cli
-
 		pushad
 		push ds
 		push es
@@ -73,16 +71,17 @@ undef_exception:
 
 		mov al,0x20
 		out 0x20,al
+		jmp restart
+%endmacro
 
+restart:
 		pop gs
 		pop fs
 		pop es
 		pop ds
 		popad
 
-		sti
         iret
-%endmacro
 ; ---------------------------------
 ALIGN   16
 hwint00:                	; irq 0 (系统闹钟/定时器).
@@ -214,6 +213,8 @@ simd_exception:						; #XM  SIMD浮点异常
 exception_entry:
 	call	exception_handler
 	add		esp, 4*2
+	hlt
 	iret
 
 ; -----------------------------------------------------------------------------
+

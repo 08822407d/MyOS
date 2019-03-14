@@ -61,6 +61,8 @@
     void i8259A_disable(void);
     
 /* --------------------------X86架构相关的操作----------------------------- */
+    void init_segdesc(struct segdesc_s* seg_dp, u32_t base,u32_t size, u32_t attr);
+
     void init_param_dataseg(struct segdesc_s *seg_dp,
 							u32_t base, u32_t size,	u32_t privilege);
     void init_codeseg(u32_t index, u32_t privilege);
@@ -75,5 +77,7 @@
     void set_int_gate_idt(u32_t, u32_t, u32_t);
     void idt_veccpy_exception(void);
     void idt_veccpy_pic(void);
+
+    void process_init();
 
 #endif

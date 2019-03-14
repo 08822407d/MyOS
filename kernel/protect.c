@@ -36,31 +36,27 @@ PUBLIC void set_segdesc( struct segdesc_s* seg_dp, u32_t base,u32_t size)
 }
 
 /* --------------------------设置一个系统段描述符------------------------------ */
-PUBLIC void init_sysseg(u32_t index, u32_t base,u32_t size)
+PUBLIC void init_segdesc(struct segdesc_s* seg_dp, u32_t base,u32_t size, u32_t attr)
 {
-	/* 设置一个系统段 */
-	set_segdesc(&gdt[index], base, size);
-	gdt[index].access = (PRESENT);
-		/* 存在于内存，权限0，系统/门段 */
+	set_segdesc(seg_dp, base, size);
+	seg_dp->access |= attr;
 }
 
 /* 设置tss描述符 */
 PUBLIC void init_tssdesc(u32_t index, u32_t base)
 {
-	init_sysseg(index, base, 
-				sizeof(struct tss_s));
+	set_segdesc(&gdt[index], base, sizeof(struct tss_s));
 	gdt[index].access |= DA_386TSS;
 }
 
 /* 设置ldt描述符 */
 PUBLIC void init_ldtdesc(u32_t index, u32_t base)
 {
-	init_sysseg(index, base, 
-				sizeof(struct desctabptr_s[LDT_SIZE]));
+	set_segdesc(&gdt[index], base, sizeof(struct tss_s));
 	gdt[index].access |= DA_LDT;
 }
 
-/* ----------------------通用的设置一个数据段描述符的函数-------------------------- */
+/* --------------------------设置一个全局段描述符------------------------------ */
 PUBLIC void init_param_dataseg(struct segdesc_s *seg_dp,
 								u32_t base, u32_t size,	u32_t privilege)
 {
@@ -71,20 +67,32 @@ PUBLIC void init_param_dataseg(struct segdesc_s *seg_dp,
 	/* EXECUTABLE = 0, EXPAND_DOWN = 0, ACCESSED = 0 
 			不可执行、向上扩展、权限级别0						*/
 }
+
+PUBLIC void init_param_codeseg(struct segdesc_s *seg_dp,
+								u32_t base, u32_t size,	u32_t privilege)
+{
+	/* 设置一个数据段的描述符 */
+	set_segdesc(seg_dp, base, size);
+	seg_dp->access = (privilege << DPL_SHIFT) | 
+						(PRESENT | SEGMENT | EXECUTABLE | READABLE);
+	/* EXECUTABLE = 0, EXPAND_DOWN = 0, ACCESSED = 0 
+			可执行、向上扩展、权限级别0						*/
+}
+
 /* 设置flat数据段描述符的函数 */
 PUBLIC void init_dataseg(u32_t index, u32_t privilege)
 {
 	/* 设置一个数据段的描述符,默认基址0，尺寸4GB */
-	init_param_dataseg(&gdt[index], 0, 0xFFFFFFFF, privilege);
+	init_param_dataseg(&gdt[index], 0, SIZE_4GB, privilege);
 }
 
 /* 设置flat代码段描述符的函数 */
 PUBLIC void init_codeseg(u32_t index, u32_t privilege)
 {
 	/* 设置一个代码段描述符,默认基址0，尺寸4GB */
-	set_segdesc(&gdt[index], 0, 0xFFFFFFFF);
-	gdt[index].access = (privilege << DPL_SHIFT)
-	        | (PRESENT | SEGMENT | EXECUTABLE | READABLE);
+	set_segdesc(&gdt[index], 0, SIZE_4GB);
+	gdt[index].access = (privilege << DPL_SHIFT) |
+						(PRESENT | SEGMENT | EXECUTABLE | READABLE);
 		/* CONFORMING = 0, ACCESSED = 0
 			非一致代码段，权限级别0		*/
 }
@@ -103,7 +111,7 @@ PUBLIC void init_dummyseg(u32_t index)
 /* -------------------------------初始化TSS------------------------------- */
 PUBLIC void tss_init(u8_t * kernel_stack)
 {
-	struct tss_s * t = &tss;
+	struct tss_s * t = &tss0;
 	int index = INDEX_TSS0;
 	struct segdesc_s *tssgdt;
 

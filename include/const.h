@@ -16,14 +16,14 @@
     #define TR_SEG      4
 
 /* 全局描述符 */
-    #define INDEX_DUMMY         0x00
-    #define INDEX_VGARAM        0x01
-    #define INDEX_CS_KRNL       0x02
-    #define INDEX_DS_KRNL       0x03
-    #define INDEX_CS_SYSCALL    0x04
-    #define INDEX_DS_SYSCALL    0x05
-    #define INDEX_TSS0          0x06
-    #define INDEX_LDT0          0x07
+    #define INDEX_DUMMY         00
+    #define INDEX_VGARAM        01
+    #define INDEX_CS_KRNL       02
+    #define INDEX_DS_KRNL       03
+    #define INDEX_CS_SYSCALL    04
+    #define INDEX_DS_SYSCALL    05
+    #define INDEX_TSS0          06
+    #define INDEX_LDT0          07
 
     #define SEG_SELECTOR(i)     ((i)*8)
     #define SELECTOR_DUMMY      SEG_SELECTOR(INDEX_DUMMY)
@@ -35,6 +35,11 @@
     #define SELECTOR_TSS0       SEG_SELECTOR(INDEX_TSS0)|KRNL_PRIVILEGE
     #define SELECTOR_LDT0       SEG_SELECTOR(INDEX_LDT0)|KRNL_PRIVILEGE
 
+    #define INDEX_CS_LOCAL      01
+    #define INDEX_DS_LOCAL      02
+
+    #define SELECTOR_CS_LOCAL   SEG_SELECTOR(INDEX_CS_LOCAL)|SA_TIL
+    #define SELECTOR_DS_LOCAL   SEG_SELECTOR(INDEX_DS_LOCAL)|SA_TIL
 /*======================================================================*
                         一些i386架构的系统常量
  *======================================================================*/
@@ -69,6 +74,8 @@
     #define	KRNL_PRIVILEGE		0
     #define	TASK_PRIVILEGE		1
     #define	USER_PRIVILEGE		3
+
+    #define SIZE_4GB            0xFFFFFFFF
 /* 描述符类型值说明 */
     #define	DA_32				0x4000	/* 32 位段				 */
     #define	DA_LIMIT_4K			0x8000	/* 段界限粒度为 4K 字节	   */

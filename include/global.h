@@ -17,7 +17,7 @@ EXTERN	struct gatedesc_s 	idt[IDT_SIZE];
 EXTERN	unsigned char 		k_Stack[K_STACK_SIZE];
 #define k_Stacktop			(u32_t)k_Stack+K_STACK_SIZE
 
-EXTERN  struct tss_s 		tss;
+EXTERN  struct tss_s 		tss0;
 
 //extern  struct proc_s * 	PCB;
 //extern	unsigned char *		proc_Stack;

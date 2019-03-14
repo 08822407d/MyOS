@@ -18,7 +18,8 @@
 		struct stackframe_s p_reg;   /* process registers saved in stack frame */
 
 		u16_t ldt_sele;                      /* gdt selector giving ldt base and limit */
-
+		struct segdesc_s ldt[LDT_SIZE];
+		
 //        	int ticks;
 //        	int priority;
 
@@ -33,6 +34,9 @@
 	};
 
 
+	PUBLIC void TestA();
+	PUBLIC void TestB();
+	PUBLIC void TestC();
 /* stacks of tasks */
 	#define STACK_SIZE_TESTA	0x8000
 	#define STACK_SIZE_TESTB	0x8000

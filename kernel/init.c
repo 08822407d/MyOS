@@ -11,6 +11,9 @@ void sys_init()
     protect_init();
 
     interrupt_init();
+
+	process_init();
+	x86_ltr(SELECTOR_TSS0);
 }
 
 /*===========================================================================*
@@ -39,7 +42,7 @@ PUBLIC void protect_init()
 	init_codeseg(INDEX_CS_SYSCALL, TASK_PRIVILEGE);
 	init_dataseg(INDEX_DS_SYSCALL, TASK_PRIVILEGE);
 
-	gdt_desc.limit += 6 * sizeof(struct segdesc_s);
+	gdt_desc.limit += 8 * sizeof(struct segdesc_s);
 	x86_lgdt(&gdt_desc);
 }
 

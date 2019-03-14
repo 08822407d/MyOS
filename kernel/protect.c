@@ -35,7 +35,8 @@ PUBLIC void set_segdesc( struct segdesc_s* seg_dp, u32_t base,u32_t size)
   	seg_dp->granularity |= DEFAULT;	/* 段上限默认为4GB */
 }
 
-PUBLIC init_sysseg(u32_t index, u32_t base,u32_t size)
+/* --------------------------设置一个系统段描述符------------------------------ */
+PUBLIC void init_sysseg(u32_t index, u32_t base,u32_t size)
 {
 	/* 设置一个系统段 */
 	set_segdesc(&gdt[index], base, size);
@@ -43,14 +44,16 @@ PUBLIC init_sysseg(u32_t index, u32_t base,u32_t size)
 		/* 存在于内存，权限0，系统/门段 */
 }
 
-PUBLIC init_tssdesc(u32_t index, u32_t base)
+/* 设置tss描述符 */
+PUBLIC void init_tssdesc(u32_t index, u32_t base)
 {
 	init_sysseg(index, base, 
 				sizeof(struct tss_s));
 	gdt[index].access |= DA_386TSS;
 }
 
-PUBLIC init_ldtdesc(u32_t index, u32_t base)
+/* 设置ldt描述符 */
+PUBLIC void init_ldtdesc(u32_t index, u32_t base)
 {
 	init_sysseg(index, base, 
 				sizeof(struct desctabptr_s[LDT_SIZE]));
@@ -68,15 +71,15 @@ PUBLIC void init_param_dataseg(struct segdesc_s *seg_dp,
 	/* EXECUTABLE = 0, EXPAND_DOWN = 0, ACCESSED = 0 
 			不可执行、向上扩展、权限级别0						*/
 }
-/* -------------------------设置flat数据段描述符的函数---------------------------- */
+/* 设置flat数据段描述符的函数 */
 PUBLIC void init_dataseg(u32_t index, u32_t privilege)
 {
 	/* 设置一个数据段的描述符,默认基址0，尺寸4GB */
 	init_param_dataseg(&gdt[index], 0, 0xFFFFFFFF, privilege);
 }
 
-/* ------------------------设置flat代码段描述符的函数------------------------- */
-PRIVATE void init_codeseg(u32_t index, u32_t privilege)
+/* 设置flat代码段描述符的函数 */
+PUBLIC void init_codeseg(u32_t index, u32_t privilege)
 {
 	/* 设置一个代码段描述符,默认基址0，尺寸4GB */
 	set_segdesc(&gdt[index], 0, 0xFFFFFFFF);
@@ -86,6 +89,7 @@ PRIVATE void init_codeseg(u32_t index, u32_t privilege)
 			非一致代码段，权限级别0		*/
 }
 
+/* 设置空段 */
 PUBLIC void init_dummyseg(u32_t index)
 {
 	gdt[index].access = 0;
@@ -115,47 +119,3 @@ PUBLIC void tss_init(u8_t * kernel_stack)
 	t->cs = SELECTOR_CS_KRNL;
 	t->iobase = sizeof(struct tss_s);	/* 无io-map */
 }
-
-/* -------------------------------增加一个段描述符------------------------------- */
-PUBLIC void add_desc_gdt(u32_t segtype, u32_t privilege)
-{
-	u16_t gdt_currentsize = gdt_desc.limit + 1;
-	if (gdt_currentsize == 1)
-		gdt_currentsize--;
-
-	switch (segtype)
-	{
-		case CODE_SEG :
-			init_codeseg(gdt_currentsize / 8, privilege);
-			break;
-		case DATA_SEG :
-		case TSS_SEG  :
-		case TR_SEG   :
-			init_dataseg(gdt_currentsize / 8, privilege);
-			break;
-		default : 
-			init_dummyseg(gdt_currentsize / 8);
-
-	}
-	gdt_currentsize += 8;
-	gdt_desc.limit = gdt_currentsize - 1;
-}
-
-PUBLIC void del_desc_gdt(void)
-{
-	u16_t gdt_currentindex;
-	if (gdt_desc.limit + 1 > 0 )
-	{
-		gdt_currentindex = (gdt_desc.limit + 1) / 8;
-
-		gdt[gdt_currentindex].access = 0;
-		gdt[gdt_currentindex].base_high = 0;
-		gdt[gdt_currentindex].base_low = 0;
-		gdt[gdt_currentindex].base_middle = 0;
-		gdt[gdt_currentindex].granularity = 0;
-		gdt[gdt_currentindex].limit_low = 0;
-
-		gdt_desc.limit -= 8;
-	}
-}
-

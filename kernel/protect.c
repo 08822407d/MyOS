@@ -64,6 +64,16 @@ PRIVATE void init_codeseg(u32_t index, u32_t privilege)
 			非一致代码段，权限级别0		*/
 }
 
+PUBLIC void init_dummyseg(u32_t index)
+{
+	gdt[index].access = 0;
+	gdt[index].base_high = 0;
+	gdt[index].base_low = 0;
+	gdt[index].base_middle = 0;
+	gdt[index].granularity = 0;
+	gdt[index].limit_low = 0;
+}
+
 /* -------------------------------初始化TSS------------------------------- */
 PUBLIC void tss_init(u8_t * kernel_stack)
 {
@@ -82,16 +92,6 @@ PUBLIC void tss_init(u8_t * kernel_stack)
 	t->ds = t->es = t->fs = t->gs = t->ss0 = SELECTOR_DS_KRNL;
 	t->cs = SELECTOR_CS_KRNL;
 	t->iobase = sizeof(struct tss_s);	/* 无io-map */
-}
-
-PUBLIC void init_dummyseg(u32_t index)
-{
-	gdt[index].access = 0;
-	gdt[index].base_high = 0;
-	gdt[index].base_low = 0;
-	gdt[index].base_middle = 0;
-	gdt[index].granularity = 0;
-	gdt[index].limit_low = 0;
 }
 
 /* -------------------------------增加一个段描述符------------------------------- */
@@ -136,3 +136,4 @@ PUBLIC void del_desc_gdt(void)
 		gdt_desc.limit -= 8;
 	}
 }
+

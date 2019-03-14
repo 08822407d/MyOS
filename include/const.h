@@ -7,6 +7,7 @@
  *======================================================================*/
     #define GDT_SIZE    1024
     #define IDT_SIZE    256
+    #define LDT_SIZE    3
 /* 段类型 */
     #define DUMMY_SEG   0
     #define CODE_SEG    1
@@ -19,25 +20,20 @@
     #define INDEX_VGARAM        0x01
     #define INDEX_CS_KRNL       0x02
     #define INDEX_DS_KRNL       0x03
-    #define INDEX_CS_TASK       0x04
-    #define INDEX_DS_TASK       0x05
-    #define INDEX_CS_USER       0x06
-    #define INDEX_DS_USER       0x07
-    #define INDEX_TSS0          0x08
-    #define INDEX_LDT_TASK0     0x09
-    #define INDEX_LDT_USER0     0x0A
+    #define INDEX_CS_SYSCALL    0x04
+    #define INDEX_DS_SYSCALL    0x05
+    #define INDEX_TSS0          0x06
+    #define INDEX_LDT0          0x07
 
-    #define SELECTOR_DUMMY      (INDEX_DUMMY   * 8)
-    #define SELECTOR_VGARAM     (INDEX_VGARAM  * 8)
-    #define SELECTOR_CS_KRNL    (INDEX_CS_KRNL * 8)
-    #define SELECTOR_DS_KRNL    (INDEX_DS_KRNL * 8)
-    #define SELECTOR_CS_TASK    (INDEX_CS_TASK * 8)
-    #define SELECTOR_DS_TASK    (INDEX_DS_TASK * 8)
-    #define SELECTOR_CS_USER    (INDEX_CS_USER * 8)
-    #define SELECTOR_DS_USER    (INDEX_DS_USER * 8)
-    #define SELECTOR_TSS0       (INDEX_TSS0    * 8)
-    #define SELECTOR_LDT_TASK0  (INDEX_LDT_TASK0 * 8)
-    #define SELECTOR_LDT_USER0  (INDEX_LDT_USER0 * 8)
+    #define SEG_SELECTOR(i)     ((i)*8)
+    #define SELECTOR_DUMMY      SEG_SELECTOR(INDEX_DUMMY)
+    #define SELECTOR_VGARAM     SEG_SELECTOR(INDEX_VGARAM       |   USER_PRIVILEGE)
+    #define SELECTOR_CS_KRNL    SEG_SELECTOR(INDEX_CS_KRNL      |   KRNL_PRIVILEGE)
+    #define SELECTOR_DS_KRNL    SEG_SELECTOR(INDEX_DS_KRNL      |   KRNL_PRIVILEGE)
+    #define SELECTOR_CS_SYSCALL SEG_SELECTOR(INDEX_CS_SYSCALL   |   TASK_PRIVILEGE)
+    #define SELECTOR_DS_SYSCALL SEG_SELECTOR(INDEX_CS_SYSCALL   |   TASK_PRIVILEGE)
+    #define SELECTOR_TSS0       SEG_SELECTOR(INDEX_TSS0         |   KRNL_PRIVILEGE)
+    #define SELECTOR_LDT0       SEG_SELECTOR(INDEX_LDT0         |   KRNL_PRIVILEGE)
 
 /*======================================================================*
                         一些i386架构的系统常量
@@ -74,24 +70,24 @@
     #define	TASK_PRIVILEGE		1
     #define	USER_PRIVILEGE		3
 /* 描述符类型值说明 */
-    #define	DA_32				0x4000	/* 32 位段				*/
-    #define	DA_LIMIT_4K			0x8000	/* 段界限粒度为 4K 字节			*/
+    #define	DA_32				0x4000	/* 32 位段				 */
+    #define	DA_LIMIT_4K			0x8000	/* 段界限粒度为 4K 字节	   */
     #define	DA_DPL0				0x00	/* DPL = 0				*/
     #define	DA_DPL1				0x20	/* DPL = 1				*/
     #define	DA_DPL2				0x40	/* DPL = 2				*/
     #define	DA_DPL3				0x60	/* DPL = 3				*/
 /* 存储段描述符类型值说明 */
-    #define	DA_DR				0x90	/* 存在的只读数据段类型值		*/
-    #define	DA_DRW				0x92	/* 存在的可读写数据段属性值		*/
-    #define	DA_DRWA				0x93	/* 存在的已访问可读写数据段类型值	*/
-    #define	DA_C				0x98	/* 存在的只执行代码段属性值		*/
-    #define	DA_CR				0x9A	/* 存在的可执行可读代码段属性值		*/
+    #define	DA_DR				0x90	/* 存在的只读数据段类型值		   */
+    #define	DA_DRW				0x92	/* 存在的可读写数据段属性值		   */
+    #define	DA_DRWA				0x93	/* 存在的已访问可读写数据段类型值   */
+    #define	DA_C				0x98	/* 存在的只执行代码段属性值	       */
+    #define	DA_CR				0x9A	/* 存在的可执行可读代码段属性值	    */
     #define	DA_CCO				0x9C	/* 存在的只执行一致代码段属性值		*/
-    #define	DA_CCOR				0x9E	/* 存在的可执行可读一致代码段属性值	*/
+    #define	DA_CCOR				0x9E	/* 存在的可执行可读一致代码段属性值	 */
 /* 系统段描述符类型值说明 */
-    #define	DA_LDT				0x82	/* 局部描述符表段类型值			*/
+    #define	DA_LDT				0x82	/* 局部描述符表段类型值		 */
     #define	DA_TaskGate			0x85	/* 任务门类型值				*/
-    #define	DA_386TSS			0x89	/* 可用 386 任务状态段类型值		*/
+    #define	DA_386TSS			0x89	/* 可用 386 任务状态段类型值 */
     #define	DA_386CGate			0x8C	/* 386 调用门类型值			*/
     #define	DA_386IGate			0x8E	/* 386 中断门类型值			*/
     #define	DA_386TGate			0x8F	/* 386 陷阱门类型值			*/

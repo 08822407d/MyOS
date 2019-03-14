@@ -35,8 +35,30 @@ PUBLIC void set_segdesc( struct segdesc_s* seg_dp, u32_t base,u32_t size)
   	seg_dp->granularity |= DEFAULT;	/* 段上限默认为4GB */
 }
 
+PUBLIC init_sysseg(u32_t index, u32_t base,u32_t size)
+{
+	/* 设置一个系统段 */
+	set_segdesc(&gdt[index], base, size);
+	gdt[index].access = (PRESENT);
+		/* 存在于内存，权限0，系统/门段 */
+}
+
+PUBLIC init_tssdesc(u32_t index, u32_t base)
+{
+	init_sysseg(index, base, 
+				sizeof(struct tss_s));
+	gdt[index].access |= DA_386TSS;
+}
+
+PUBLIC init_ldtdesc(u32_t index, u32_t base)
+{
+	init_sysseg(index, base, 
+				sizeof(struct desctabptr_s[LDT_SIZE]));
+	gdt[index].access |= DA_LDT;
+}
+
 /* ----------------------通用的设置一个数据段描述符的函数-------------------------- */
-PUBLIC void init_param_dataseg(register struct segdesc_s *seg_dp,
+PUBLIC void init_param_dataseg(struct segdesc_s *seg_dp,
 								u32_t base, u32_t size,	u32_t privilege)
 {
 	/* 设置一个数据段的描述符 */

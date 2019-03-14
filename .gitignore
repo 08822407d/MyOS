@@ -1,8 +1,8 @@
 bakfiles
 bochsrc.txt
 bochsout.txt
-myos.vhd
-vhd参数.png
+*.vhd
+*.png
 *.bin
 *.o
 *.d

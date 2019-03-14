@@ -5,4 +5,5 @@ myos.vhd
 vhd参数.png
 *.bin
 *.o
+*.d
 *.DS_Store

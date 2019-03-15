@@ -1,34 +1,27 @@
+STACKBASE	equ	0
+GSREG		equ	STACKBASE
+FSREG		equ	GSREG		+ 4
+ESREG		equ	FSREG		+ 4
+DSREG		equ	ESREG		+ 4
+EDIREG		equ	DSREG		+ 4
+ESIREG		equ	EDIREG		+ 4
+EBPREG		equ	ESIREG		+ 4
+K_ESPREG	equ	EBPREG		+ 4
+EBXREG		equ	K_ESPREG	+ 4
+EDXREG		equ	EBXREG		+ 4
+ECXREG		equ	EDXREG		+ 4
+EAXREG		equ	ECXREG		+ 4
+RETADR		equ	EAXREG		+ 4
+EIPREG		equ	RETADR		+ 4
+CSREG		equ	EIPREG		+ 4
+EFLAGSREG	equ	CSREG		+ 4
+ESPREG		equ	EFLAGSREG	+ 4
+SSREG		equ	ESPREG		+ 4
+STACKTOP	equ	SSREG		+ 4
+LDT_SEL	    equ	STACKTOP
+LDT		    equ	LDT_SEL	+ 4
 
-; ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-;                               sconst.inc
-; ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-;                                                     Forrest Yu, 2005
-; ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-STACKBASE	 equ	0
-GS		 equ	STACKBASE
-FS		 equ	GS		+ 4
-ES	 	 equ	FS		+ 4
-DS	 	 equ	ES		+ 4
-EDI	 	 equ	DS		+ 4
-ESI		 equ	EDI		+ 4
-EBP		 equ	ESI		+ 4
-K_ESP    equ	EBP		+ 4
-EBX		 equ	K_ESP	+ 4
-EDX		 equ	EBX		+ 4
-ECX		 equ	EDX		+ 4
-EAX		 equ	ECX		+ 4
-RETADDR	 equ	EAX		+ 4
-EIP		 equ	RETADDR	+ 4
-CS		 equ	EIP		+ 4
-EFLAGS	 equ	CS		+ 4
-ESP		 equ	EFLAGS	+ 4
-SS		 equ	ESP		+ 4
-STACKTOP equ	SS 		+ 4
-LDT_SEL	 equ	STACKTOP
-LDT		 equ	LDT_SEL	+ 4
-
-TSS3_S_SP0	 equ	4
+TSS_SP0	 equ	4
 
 INT_CTL      equ	0x20	; I/O port for interrupt controller         <Master>
 INT_CTLMASK  equ	0x21	; setting bits in this port disables ints   <Master>

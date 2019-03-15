@@ -6,9 +6,12 @@
 #include "archtypes.h"
 #include "archproto.h"
 
+int k_reenter = -1;
+
 void process_init()
 {
 	struct  proc_s p_proc	= PCB[0];
+	disp_int((u32_t)PCB);
 	p_proc.ldt_sele = SELECTOR_LDT0;
 	//设置gdt中ldt0和tss0两项
 	init_tssdesc(INDEX_TSS0, &tss0);
@@ -39,8 +42,8 @@ void process_init()
 	tss0.ss0 = SELECTOR_DS_KRNL;
 	tss0.sp0 = &PCB[0] + sizeof(struct stackframe_s);
 	tss0.iobase = sizeof(struct tss_s);
-
 	
+	restart();
 }
 
 /*

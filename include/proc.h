@@ -33,10 +33,11 @@
 		u16_t	proc_type;
 	};
 
+	PUBLIC void TestA(void);
+	PUBLIC void TestB(void);
+	PUBLIC void TestC(void);
 
-	PUBLIC void TestA();
-	PUBLIC void TestB();
-	PUBLIC void TestC();
+	PUBLIC void restart(void);
 /* stacks of tasks */
 	#define STACK_SIZE_TESTA	0x8000
 	#define STACK_SIZE_TESTB	0x8000

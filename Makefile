@@ -18,7 +18,7 @@ CC		= $(CROSSCOMPILE)gcc
 LD		= $(CROSSCOMPILE)ld
 LASMFLAGS	= -I boot/
 KASMFLAGS	= -I include/ -f elf
-CFLAGS		= $(M32CFLAG) -I include/ -c -fno-builtin -w
+CFLAGS		= $(M32CFLAG) -I include/ -c -fno-builtin -w -fno-stack-protector
 LDFLAGS		= $(M32LDFLAG) -s -Ttext $(ENTRYPOINT)
 DASMFLAGS	= -u -o $(ENTRYPOINT) -e $(ENTRYOFFSET)
 INCLUDEFLAGS =
@@ -46,9 +46,9 @@ clean :
 	rm -f $(KOBJS) $(COBJS:.o=.d)
 
 buildimg : clean
-	dd if=bootsec.bin of=X86ASM.vhd bs=512 count=1 seek=0 conv=notrunc
-	dd if=loader.bin of=X86ASM.vhd bs=512 count=4 seek=1 conv=notrunc
-	dd if=kernel.bin of=X86ASM.vhd bs=512 count=64 seek=5 conv=notrunc
+	dd if=bootsec.bin of=myos.vhd bs=512 count=1 seek=0 conv=notrunc
+	dd if=loader.bin of=myos.vhd bs=512 count=4 seek=1 conv=notrunc
+	dd if=kernel.bin of=myos.vhd bs=512 count=64 seek=5 conv=notrunc
 
 bootsec.bin : boot/bootsec.S boot/bootrc.inc
 	$(ASM) $(LASMFLAGS) -o $@ $<

@@ -10,6 +10,8 @@ extern  irq_handler
 extern	spurious_irq
 extern	k_reenter
 extern	PCB
+extern	tss0
+
 ; ---------------------------------
 global	divide_error
 global	single_step_exception
@@ -50,6 +52,8 @@ global  hwint15
 
 global	undef_exception
 global	undef_hwint
+
+global restart
 %include "sconst.inc"
 ; ---------------------------------------------------
 ;未定义异常和IRQ入口
@@ -73,9 +77,9 @@ undef_exception:
 
 		inc byte [gs:0]
 
-        push %1
-        call irq_handler
-        pop  ecx
+;        push %1
+;        call irq_handler
+;        pop  ecx
 
 		mov al,0x20
 		out 0x20,al
@@ -83,6 +87,11 @@ undef_exception:
 %endmacro
 
 restart:
+		mov  esp,[PCB]
+		lldt [esp + SELECTOR_LDT0]
+		lea  eax,[tss0 + STACKTOP]
+		mov  [tss0 + TSS_SP0],eax
+
 		dec dWORD [k_reenter]
 		pop gs
 		pop fs
@@ -126,9 +135,9 @@ hwint07:                	; irq 7 (打印机)
 		push fs
 		push gs
 
-        push    %1
-        call    irq_handler
-        add     esp, 4
+;        push    %1
+;        call    irq_handler
+;        add     esp, 4
 
 		pop gs
 		pop fs

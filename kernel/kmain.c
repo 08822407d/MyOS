@@ -17,4 +17,6 @@ PUBLIC void kernel_main()
 	disp_str("now in kmain.\n");
 
 	irq_8259_unmask(0U);
+
+	process_init();
 }

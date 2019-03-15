@@ -71,11 +71,11 @@ undef_exception:
 		push fs
 		push gs
 
+		inc byte [gs:0]
+		
 		inc dWORD [k_reenter]
 		cmp dWORD [k_reenter],0
-		jne restart
-
-		inc byte [gs:0]
+		jne re_enter
 
 ;        push %1
 ;        call irq_handler
@@ -87,11 +87,11 @@ undef_exception:
 %endmacro
 
 restart:
-		mov  esp,[PCB]
-		lldt [esp + SELECTOR_LDT0]
+		mov  esp,PCB
+		lldt [esp + LDT_SEL]
 		lea  eax,[tss0 + STACKTOP]
 		mov  [tss0 + TSS_SP0],eax
-
+re_enter:
 		dec dWORD [k_reenter]
 		pop gs
 		pop fs

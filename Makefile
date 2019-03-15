@@ -1,5 +1,5 @@
-linux64 = 0
-#macos64 = 0
+#linux64 = 0
+macos64 = 0
 
 ENTRYPOINT	= 0x0
 ENTRYOFFSET	=   0x0
@@ -48,7 +48,7 @@ clean :
 buildimg : clean
 	dd if=bootsec.bin of=myos.vhd bs=512 count=1 seek=0 conv=notrunc
 	dd if=loader.bin of=myos.vhd bs=512 count=4 seek=1 conv=notrunc
-	dd if=kernel.bin of=myos.vhd bs=512 count=64 seek=5 conv=notrunc
+	dd if=kernel.bin of=myos.vhd bs=512 count=256 seek=5 conv=notrunc
 
 bootsec.bin : boot/bootsec.S boot/bootrc.inc
 	$(ASM) $(LASMFLAGS) -o $@ $<

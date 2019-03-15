@@ -15,15 +15,17 @@
 
 	struct proc_s
 	{
-		struct stackframe_s p_reg;   /* process registers saved in stack frame */
+		struct stackframe_s p_reg;   		/* process registers saved in stack frame */
 
-		u16_t ldt_sele;                      /* gdt selector giving ldt base and limit */
+		u16_t ldt_sele;                     /* gdt selector giving ldt base and limit */
+		u16_t align32;
+
 		struct segdesc_s ldt[LDT_SIZE];
 		
 //        	int ticks;
 //        	int priority;
 
-		u32_t pid;                          /* process id passed in from MM */
+//		u32_t pid;                          /* process id passed in from MM */
 	};
 
 	struct proctable_s

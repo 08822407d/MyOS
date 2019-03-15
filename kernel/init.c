@@ -6,14 +6,12 @@
  //系统初始化
 void sys_init()
 {
-    disp_str("init sys.\n");
+    disp_str("init system.\n");
 
     protect_init();
 
     interrupt_init();
 
-	process_init();
-	x86_ltr(SELECTOR_TSS0);
 }
 
 /*===========================================================================*

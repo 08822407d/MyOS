@@ -6,12 +6,12 @@ jmp loader_start
 ;loader使用的GDT，也作为kernel使用的GDT的基础
 ;会被复制到kernel的GDT空间里，然后会把GDTptr也复制给c语言编写的kernel的gdt_ptr
 GDTStart:
-;                                       段基址               ，段界限                  ，段属性
-DESC_NULL:              Descriptor      0x0                 ,0x0                    ,0x0
-DESC_VgaRAM:            Descriptor      _segbase_VgaRAM     ,0x8000 - 1             ,DA_32 | DA_DRWu
-DESC_GlbCode:           Descriptor      _segbase_GlbCode    ,0xFFFFF                ,DA_32 | DA_Gr_4K | DA_CR
-DESC_GlbData:           Descriptor      _segbase_GlbData    ,0xFFFFF                ,DA_32 | DA_Gr_4K | DA_DRWu
-DESC_SysStack:          Descriptor      _segbase_SysStack   ,0x4000 - 1             ,DA_32 | DA_DRWd
+;                                       段基址               ，段界限             ，段属性
+DESC_NULL:              Descriptor      0x0                 ,0x0                ,0x0
+DESC_VgaRAM:            Descriptor      _segbase_VgaRAM     ,0x8000 - 1         ,DA_32 | DA_DRWu
+DESC_GlbCode:           Descriptor      _segbase_GlbCode    ,0xFFFFF            ,DA_32 | DA_Gr_4K | DA_CR
+DESC_GlbData:           Descriptor      _segbase_GlbData    ,0xFFFFF            ,DA_32 | DA_Gr_4K | DA_DRWu
+DESC_SysStack:          Descriptor      _segbase_SysStack   ,0x4000 - 1         ,DA_32 | DA_DRWd
 GDTEnd:
 
 GDTLen          EQU     GDTEnd  -   GDTStart

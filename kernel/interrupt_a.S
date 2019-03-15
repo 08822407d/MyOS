@@ -8,6 +8,8 @@
 extern	exception_handler
 extern  irq_handler
 extern	spurious_irq
+extern	k_reenter
+extern	PCB
 ; ---------------------------------
 global	divide_error
 global	single_step_exception
@@ -48,6 +50,7 @@ global  hwint15
 
 global	undef_exception
 global	undef_hwint
+%include "sconst.inc"
 ; ---------------------------------------------------
 ;未定义异常和IRQ入口
 undef_hwint:
@@ -57,17 +60,22 @@ undef_exception:
 ; 中断和异常 -- 硬件中断
 ; --------------------------------
 %macro  hwint_master	1
+		sub esp,4
 		pushad
 		push ds
 		push es
 		push fs
 		push gs
 
+		inc dWORD [k_reenter]
+		cmp dWORD [k_reenter],0
+		jne restart
+
 		inc byte [gs:0]
 
-        push    %1
-        call    irq_handler
-        add     esp, 4
+        push %1
+        call irq_handler
+        pop  ecx
 
 		mov al,0x20
 		out 0x20,al
@@ -75,11 +83,13 @@ undef_exception:
 %endmacro
 
 restart:
+		dec dWORD [k_reenter]
 		pop gs
 		pop fs
 		pop es
 		pop ds
 		popad
+		add esp,4
 
         iret
 ; ---------------------------------

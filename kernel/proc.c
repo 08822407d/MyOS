@@ -6,17 +6,14 @@
 #include "archtypes.h"
 #include "archproto.h"
 
-
-struct proc_s  	PCB[NR_PROCS];
-unsigned char 	proc_Stack[STACK_SIZE_TOTAL];
-
 void process_init()
 {
 	struct  proc_s p_proc	= PCB[0];
 	p_proc.ldt_sele = SELECTOR_LDT0;
 	//设置gdt中ldt0和tss0两项
-	init_ldtdesc(INDEX_LDT0, &(p_proc.ldt[0]));
 	init_tssdesc(INDEX_TSS0, &tss0);
+	init_ldtdesc(INDEX_LDT0, &(p_proc.ldt[0]));
+	gdt_desc.limit += 2 * (sizeof(struct segdesc_s));
 
 	//设置ldt
 	init_segdesc(&(p_proc.ldt[1]), 0x0, SIZE_4GB, DA_C);
@@ -40,7 +37,10 @@ void process_init()
 	p_proc.p_reg.psw = INIT_PSW;
 
 	tss0.ss0 = SELECTOR_DS_KRNL;
+	tss0.sp0 = &PCB[0] + sizeof(struct stackframe_s);
 	tss0.iobase = sizeof(struct tss_s);
+
+	
 }
 
 /*

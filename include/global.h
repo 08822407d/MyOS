@@ -2,6 +2,7 @@
 #include "type.h"
 #include "const.h"
 #include "archtypes.h"
+#include "proc.h"
 #ifdef _GLOBAL_VAR_
 #undef EXTERN
 #define EXTERN
@@ -18,9 +19,9 @@ EXTERN	unsigned char 		k_Stack[K_STACK_SIZE];
 #define k_Stacktop			(u32_t)k_Stack+K_STACK_SIZE
 
 EXTERN  struct tss_s 		tss0;
+EXTERN  struct proc_s  		PCB[NR_PROCS];
+EXTERN  u8_t 				proc_Stack[STACK_SIZE_TOTAL];
 
-//extern  struct proc_s * 	PCB;
-//extern	unsigned char *		proc_Stack;
 //extern  struct proctable_s*	proc_map;
 
 //extern	void TestA(void);

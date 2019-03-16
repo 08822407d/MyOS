@@ -63,7 +63,7 @@ undef_exception:
 ; =======================================================================================
 ; 中断和异常 -- 硬件中断
 ; --------------------------------
-%macro  hwint_master	1
+%macro  hwint_master 1
 		sub esp,4
 		pushad
 		push ds
@@ -83,13 +83,14 @@ undef_exception:
 
 		mov al,0x20
 		out 0x20,al
-		jmp restart
+
+		jmp re_enter
 %endmacro
 
 restart:
 		mov  esp,PCB
 		lldt [esp + LDT_SEL]
-		lea  eax,[tss0 + STACKTOP]
+		lea  eax,[esp + STACKTOP]
 		mov  [tss0 + TSS_SP0],eax
 re_enter:
 		dec dWORD [k_reenter]
@@ -100,7 +101,7 @@ re_enter:
 		popad
 		add esp,4
 
-        iret
+        iretd
 ; ---------------------------------
 ALIGN   16
 hwint00:                	; irq 0 (系统闹钟/定时器).

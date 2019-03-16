@@ -6,17 +6,13 @@
 #include "archtypes.h"
 #include "archproto.h"
 
-int k_reenter = -1;
+int k_reenter = 0;
 
 void process_init()
 {
 	struct proc_s *p_proc = PCB;
 	
-	disp_int(sizeof(*p_proc));
-	disp_str("\n");
 	disp_int(p_proc);
-	disp_str("\n");
-	disp_int(PCB);
 	disp_str("\n");
 	
 	p_proc->ldt_sele = SELECTOR_LDT0;
@@ -33,8 +29,8 @@ void process_init()
 	p_proc->p_reg.ds =
 	p_proc->p_reg.es =
 	p_proc->p_reg.fs =
-	p_proc->p_reg.ss = 
-	p_proc->p_reg.gs = SELECTOR_DS_LOCAL;
+	p_proc->p_reg.ss = SELECTOR_DS_LOCAL;
+	p_proc->p_reg.gs = SELECTOR_VGARAM;
 	p_proc->p_reg.eax =
 	p_proc->p_reg.ebp =
 	p_proc->p_reg.ecx =

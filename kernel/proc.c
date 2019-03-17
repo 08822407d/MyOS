@@ -21,8 +21,8 @@ void process_init()
 	init_ldtdesc(INDEX_LDT0, &(p_proc->ldt[0]));
 
 	//设置ldt
-	init_segdesc(&(p_proc->ldt[1]), 0x0, SIZE_4GB, DA_C);
-	init_segdesc(&(p_proc->ldt[2]), 0x0, SIZE_4GB, DA_DRW);
+	init_segdesc(&(p_proc->ldt[1]), 0x0, SIZE_4GB, DA_C | USER_PRIVILEGE<<DPL_SHIFT);
+	init_segdesc(&(p_proc->ldt[2]), 0x0, SIZE_4GB, DA_DRW | USER_PRIVILEGE<<DPL_SHIFT);
 
 	//设置stack_frame
 	p_proc->p_reg.cs = SELECTOR_CS_LOCAL;
@@ -40,10 +40,11 @@ void process_init()
 	p_proc->p_reg.esp = proc_Stack + STACK_SIZE_TOTAL;
 	p_proc->p_reg.eip = (u32_t)TestA;
 	p_proc->p_reg.psw = INIT_PSW;
-
+	
 	tss0.ss0 = SELECTOR_DS_KRNL;
-	tss0.sp0 = &PCB[0] + sizeof(struct stackframe_s);
+	tss0.sp0 = &(PCB[0]) + sizeof(struct stackframe_s);
 	tss0.iobase = sizeof(struct tss_s);
+
 	x86_ltr(SELECTOR_TSS0);
 
 	restart();

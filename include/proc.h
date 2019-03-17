@@ -17,8 +17,7 @@
 	{
 		struct stackframe_s p_reg;   		/* process registers saved in stack frame */
 
-		u16_t ldt_sele;                     /* gdt selector giving ldt base and limit */
-		u16_t align32;
+		u32_t ldt_sele;                     /* gdt selector giving ldt base and limit */
 
 		struct segdesc_s ldt[LDT_SIZE];
 		

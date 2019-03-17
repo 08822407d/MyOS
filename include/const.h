@@ -38,8 +38,8 @@
     #define INDEX_CS_LOCAL      01
     #define INDEX_DS_LOCAL      02
 
-    #define SELECTOR_CS_LOCAL   SEG_SELECTOR(INDEX_CS_LOCAL)|SA_TIL
-    #define SELECTOR_DS_LOCAL   SEG_SELECTOR(INDEX_DS_LOCAL)|SA_TIL
+    #define SELECTOR_CS_LOCAL   SEG_SELECTOR(INDEX_CS_LOCAL)|SA_TIL|USER_PRIVILEGE
+    #define SELECTOR_DS_LOCAL   SEG_SELECTOR(INDEX_DS_LOCAL)|SA_TIL|USER_PRIVILEGE
 /*======================================================================*
                         一些i386架构的系统常量
  *======================================================================*/

@@ -7,3 +7,4 @@ bochsout.txt
 *.o
 *.d
 *.DS_Store
+*.lock

@@ -9,6 +9,7 @@ extern	exception_handler
 extern  irq_handler
 extern	spurious_irq
 extern	k_reenter
+extern	stack_top
 extern	PCB
 extern	tss0
 
@@ -70,21 +71,22 @@ undef_exception:
 		push es
 		push fs
 		push gs
+		mov esp,stack_top
 
-		inc byte [gs:0]
+		inc BYTE [gs:0]
+
+		mov al,0x20
+		out 0x20,al
 		
 		inc dWORD [k_reenter]
 		cmp dWORD [k_reenter],0
-		jne re_enter
+		jne restart
 
 ;        push %1
 ;        call irq_handler
 ;        pop  ecx
 
-		mov al,0x20
-		out 0x20,al
-
-		jmp re_enter
+		jmp restart
 %endmacro
 
 restart:

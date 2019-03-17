@@ -8,12 +8,13 @@ extern  kernel_main
 extern  sys_init
 ;---------------------------------------------------------------------------
 [section .bss]
-stackspace  resb 0x400
+stackspace  resb 0x2000
 stack_top:
 ;---------------------------------------------------------------------------
 [section .text]
 
 global  _start
+global  stack_top
 ;---------------------------------------------------------------------------
 _start:
 ; 转移栈到kernel中

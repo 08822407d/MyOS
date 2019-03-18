@@ -8,7 +8,7 @@ extern  kernel_main
 extern  sys_init
 ;---------------------------------------------------------------------------
 [section .bss]
-stackspace  resb 0x2000
+stackspace  resb 0x400
 stack_top:
 ;---------------------------------------------------------------------------
 [section .text]

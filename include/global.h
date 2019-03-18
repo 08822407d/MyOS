@@ -16,7 +16,7 @@ EXTERN	struct segdesc_s 	gdt[GDT_SIZE];
 EXTERN	struct gatedesc_s 	idt[IDT_SIZE];
 
 EXTERN	u8_t 				k_Stack[K_STACK_SIZE];
-extern 	u8_t*				k_Stacktop;
+extern 	u32_t				k_Stacktop;
 
 EXTERN  struct tss_s 		tss0;
 EXTERN  struct proc_s	  	PCB[NR_PROCS];

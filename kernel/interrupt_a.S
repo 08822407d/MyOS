@@ -8,8 +8,11 @@
 extern	exception_handler
 extern  irq_handler
 extern	spurious_irq
+extern	disp_str
+extern	clock_handler
+
 extern	k_reenter
-extern	stack_top
+extern	k_Stacktop
 extern	p_proc_ready
 extern	tss0
 
@@ -65,51 +68,29 @@ undef_exception:
 ; 中断和异常 -- 硬件中断
 ; --------------------------------
 %macro  hwint_master 1
-		sub esp,4
-		pushad
-		push ds
-		push es
-		push fs
-		push gs
+		call save
 
-		mov dx,ss
-		mov ds,dx
-		mov es,dx
-		mov esp,stack_top
-
-		inc BYTE [gs:0]
-
-		mov al,0x20
-		out 0x20,al
-
-		inc dWORD [k_reenter]
-		cmp dWORD [k_reenter],0
-		jne restart
-
-        push %1
-        call irq_handler
-        pop  ecx
+		mov dx,INT_CTLMASK
+		in	al,dx
+		or	al,(1<<%1)
+		out dx,al
+		mov dx,INT_CTL
+		mov al,END_OF_INT
+		out dx,al
 
 		sti
+;        push %1
+        call clock_handler
+;        pop  ecx
+		cli
+		
+		mov dx,INT_CTLMASK
+		in	al,dx
+		and	al,~(1<<%1)
+		out dx,al
+
 		jmp restart
 %endmacro
-
-restart:
-		cli
-		mov  esp,[p_proc_ready]
-		lldt [esp + LDT_SEL]
-		lea  eax,[esp + STACKTOP]
-		mov  [tss0 + TSS_SP0],eax
-re_enter:
-		dec dWORD [k_reenter]
-		pop gs
-		pop fs
-		pop es
-		pop ds
-		popad
-		add esp,4
-
-        iretd
 ; ---------------------------------
 ALIGN   16
 hwint00:                	; irq 0 (系统闹钟/定时器).
@@ -138,23 +119,30 @@ hwint07:                	; irq 7 (打印机)
 
 ; ---------------------------------
 %macro  hwint_slave		1
-		pushad
-		push ds
-		push es
-		push fs
-		push gs
+		call	save
 
-;        push    %1
-;        call    irq_handler
-;        add     esp, 4
+		mov		dx,INT2_CTLMASK
+		in		al,dx
+		or		al,(1<<(%1 - 8))
+		out		dx,al
+		mov 	dx,INT_CTL
+		mov 	al,END_OF_INT
+		out 	dx,al
+		jmp 	$+2
+		out 	dx,al
 
-		pop gs
-		pop fs
-		pop es
-		pop ds
-		popad
+		sti
+        push 	%1
+        call 	irq_handler
+        pop  	ecx
+		cli
+		
+		mov 	dx,INT2_CTLMASK
+		in		al,dx
+		and		al,~(1<<(%1 - 8))
+		out 	dx,al
 
-        iret
+		ret
 %endmacro
 ; ---------------------------------
 ALIGN   16
@@ -181,6 +169,49 @@ hwint14:                	; irq 14 (AT硬盘/温彻斯特盘/主IDE盘)
 ALIGN   16
 hwint15:                	; irq 15 (次IDE盘)
     hwint_slave     15
+
+; ---------------------------------
+save:
+		cld
+		pushad
+		push	ds
+		push	es
+		push	fs
+		push	gs
+
+		mov		dx,ss
+		mov		ds,dx
+		mov		es,dx
+
+		inc dWORD [k_reenter]
+		jnz 	set_restart_reenter
+
+		mov 	eax,esp
+		mov 	esp,[ds:k_Stacktop]
+		push	restart
+		xor		ebp,ebp
+		jmp 	[eax + RETADDR - STACKBASE]
+		
+set_restart_reenter:
+		push	restart_reenter
+		jmp 	[eax + RETADDR - STACKBASE]
+
+; ---------------------------------
+restart:
+		mov		esp,[p_proc_ready]
+		lldt	[esp + LDT_SEL]
+		lea		eax,[esp + STACKTOP]
+		mov		[tss0 + TSS_SP0],eax
+restart_reenter:
+		dec dWORD [k_reenter]
+		pop		gs
+		pop		fs
+		pop		es
+		pop		ds
+		popad
+		add		esp,4
+
+        iretd
 
 ; =======================================================================================
 ; 中断和异常 -- 异常

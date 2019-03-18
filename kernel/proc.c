@@ -55,7 +55,15 @@ void process_init()
 	tss0.iobase = sizeof(struct tss_s);
 // 汇编代码中，进程切换功能所使用的指针，指向下一个进程的进程表
 	x86_ltr(SELECTOR_TSS0);
-
+	
+	disp_str("~~~");
+	disp_int(&k_reenter);
+	disp_str("~~~");
+	disp_int(k_reenter);
+	disp_str("~~~");
+	disp_int(k_Stacktop);
+	disp_str("~~~");
+	
     restart();
 
 	while(1){}

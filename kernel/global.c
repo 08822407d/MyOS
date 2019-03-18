@@ -3,7 +3,7 @@
 #include "global.h"
 #include "proc.h"
 
-PUBLIC  u8_t*    k_Stacktop = k_Stack + K_STACK_SIZE;
+PUBLIC  u32_t    k_Stacktop = &(k_Stack[0]) + K_STACK_SIZE;
 
 PUBLIC  int      k_reenter = 0;
 PUBLIC  u32_t    p_num = 0;

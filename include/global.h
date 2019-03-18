@@ -15,18 +15,22 @@ EXTERN	struct desctabptr_s gdt_desc,
 EXTERN	struct segdesc_s 	gdt[GDT_SIZE];
 EXTERN	struct gatedesc_s 	idt[IDT_SIZE];
 
-EXTERN	unsigned char 		k_Stack[K_STACK_SIZE];
-#define k_Stacktop			(u32_t)k_Stack+K_STACK_SIZE
+EXTERN	u8_t 				k_Stack[K_STACK_SIZE];
+extern 	u8_t*				k_Stacktop;
 
 EXTERN  struct tss_s 		tss0;
-EXTERN  struct proc_s  		PCB[NR_PROCS];
+EXTERN  struct proc_s	  	PCB[NR_PROCS];
 EXTERN  u8_t 				proc_Stack[STACK_SIZE_TOTAL];
 
-//extern  struct proctable_s*	proc_map;
+extern 	struct proc_s* 		p_proc_ready; 
+extern 	int 				k_reenter;
+extern	u32_t    			p_num;
+extern  struct proctable_s	proc_map[];
+extern 	unsigned char* 		p_stacktop;
 
-//extern	void TestA(void);
-//extern	void TestB(void);
-//extern	void TestC(void);
+void TestA(void);
+void TestB(void);
+void TestC(void);
 
 /* 宏 */
 /* 线性地址 → 物理地址 */

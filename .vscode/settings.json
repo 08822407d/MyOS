@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "const.h": "c",
+        "global.h": "c"
+    }
+}

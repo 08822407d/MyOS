@@ -24,14 +24,14 @@
 //        	int ticks;
 //        	int priority;
 
-//		u32_t pid;                          /* process id passed in from MM */
+		u32_t pid;                          /* process id passed in from MM */
 	};
 
 	struct proctable_s
 	{
 		proc_f	initial_eip;
 		int		stacksize;
-		u16_t	proc_type;
+		u32_t	proc_type;
 	};
 
 	PUBLIC void TestA(void);

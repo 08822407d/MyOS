@@ -6,23 +6,18 @@
 #include "archtypes.h"
 #include "archproto.h"
 
-int k_reenter = 0;
+#define DELAY_SCALE 4
 
-void process_init()
-{
-	struct proc_s *p_proc = PCB;
-	
-	disp_int(p_proc);
-	disp_str("\n");
-	
+void arch_proc_reset(struct proc_s *p_proc, struct proctable_s *p_table)
+{	
 	p_proc->ldt_sele = SELECTOR_LDT0;
 	//设置gdt中ldt0和tss0两项
 	init_tssdesc(INDEX_TSS0, &tss0);
 	init_ldtdesc(INDEX_LDT0, &(p_proc->ldt[0]));
 
 	//设置ldt
-	init_segdesc(&(p_proc->ldt[1]), 0x0, SIZE_4GB, DA_C | USER_PRIVILEGE<<DPL_SHIFT);
-	init_segdesc(&(p_proc->ldt[2]), 0x0, SIZE_4GB, DA_DRW | USER_PRIVILEGE<<DPL_SHIFT);
+	init_segdesc(&(p_proc->ldt[1]), 0x0, SIZE_4GB, DA_C | p_table->proc_type<<DPL_SHIFT);
+	init_segdesc(&(p_proc->ldt[2]), 0x0, SIZE_4GB, DA_DRW | p_table->proc_type<<DPL_SHIFT);
 
 	//设置stack_frame
 	p_proc->p_reg.cs = SELECTOR_CS_LOCAL;
@@ -37,23 +32,16 @@ void process_init()
 	p_proc->p_reg.edx =
 	p_proc->p_reg.esi =
 	p_proc->p_reg.edi = 0;
-	p_proc->p_reg.esp = proc_Stack + STACK_SIZE_TOTAL;
-	p_proc->p_reg.eip = (u32_t)TestA;
+	p_proc->p_reg.esp = p_stacktop;
+	p_proc->p_reg.eip = p_table->initial_eip;
 	p_proc->p_reg.psw = INIT_PSW;
-	
-	tss0.ss0 = SELECTOR_DS_KRNL;
-	tss0.sp0 = &(PCB[0]) + sizeof(struct stackframe_s);
-	tss0.iobase = sizeof(struct tss_s);
 
-	x86_ltr(SELECTOR_TSS0);
-
-	restart();
+	p_stacktop -= p_table->stacksize;
 }
 
-/*
 void process_init()
 {
-    struct  proc_s* p_proc	= PCB;
+    struct proc_s* p_proc = PCB;
 
 	for (int i = 0; i < NR_PROCS; i++)
 	{
@@ -62,23 +50,16 @@ void process_init()
 		p_proc->pid = i;
 	}
 
-	int k_reenter = -1;
-
+	tss0.ss0 = SELECTOR_DS_KRNL;
+	tss0.sp0 = PCB + sizeof(struct stackframe_s);
+	tss0.iobase = sizeof(struct tss_s);
 // 汇编代码中，进程切换功能所使用的指针，指向下一个进程的进程表
-	struct proc_s* p_proc_ready = PCB; 
-	  
+	x86_ltr(SELECTOR_TSS0);
+
     restart();
 
 	while(1){}
 }
-*/
-
-struct proctable_s proc_map[] = 
-{
-	{TestA, STACK_SIZE_TESTA, USER_PROC},
-	{TestB, STACK_SIZE_TESTB, USER_PROC},
-	{TestC, STACK_SIZE_TESTC, USER_PROC}
-};
 
 // 测试用的进程体
 void TestA()
@@ -87,8 +68,8 @@ void TestA()
 	while(1){
 		disp_str("A");
 		disp_int(i++);
-		disp_str(".");
-		delay(1);
+		disp_str("...");
+		delay(DELAY_SCALE);
 	}
 }
 
@@ -98,8 +79,8 @@ void TestB()
 	while(1){
 		disp_str("B");
 		disp_int(i++);
-		disp_str(".");
-		delay(1);
+		disp_str("...");
+		delay(DELAY_SCALE);
 	}
 }
 
@@ -109,8 +90,8 @@ void TestC()
 	while(1){
 		disp_str("C");
 		disp_int(i++);
-		disp_str(".");
-		delay(1);
+		disp_str("...");
+		delay(DELAY_SCALE);
 	}
 }
 

@@ -10,7 +10,7 @@ extern  irq_handler
 extern	spurious_irq
 extern	k_reenter
 extern	stack_top
-extern	PCB
+extern	p_proc_ready
 extern	tss0
 
 ; ---------------------------------
@@ -71,26 +71,32 @@ undef_exception:
 		push es
 		push fs
 		push gs
+
+		mov dx,ss
+		mov ds,dx
+		mov es,dx
 		mov esp,stack_top
 
 		inc BYTE [gs:0]
 
 		mov al,0x20
 		out 0x20,al
-		
+
 		inc dWORD [k_reenter]
 		cmp dWORD [k_reenter],0
 		jne restart
 
-;        push %1
-;        call irq_handler
-;        pop  ecx
+        push %1
+        call irq_handler
+        pop  ecx
 
+		sti
 		jmp restart
 %endmacro
 
 restart:
-		mov  esp,PCB
+		cli
+		mov  esp,[p_proc_ready]
 		lldt [esp + LDT_SEL]
 		lea  eax,[esp + STACKTOP]
 		mov  [tss0 + TSS_SP0],eax

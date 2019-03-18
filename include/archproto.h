@@ -80,4 +80,7 @@
 
     void process_init();
 
+/* --------------------------X86架构相关的操作----------------------------- */
+    void clock_handler(void);
+
 #endif

@@ -196,7 +196,7 @@ void irq_handler(u32_t irq)
 	switch (irq)
 	{
 		case CLOCK_IRQ:
-			spurious_proc_manage();
+			clock_handler();
 			break;
 	
 		default:
@@ -210,19 +210,6 @@ void spurious_irq(u32_t irq)
 	disp_str("spurious_irq: ");
 	disp_int(irq);
 	disp_str("\n");
-}
-
-void spurious_proc_manage()
-{
-	u16_t count = 0x00;
-	while(1)
-	{
-		disp_str("A-");
-		disp_int(count);
-		disp_str(";  ");
-		count++;
-		delay(4);
-	}
 }
 
 /*======================================================================*

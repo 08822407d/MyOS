@@ -1,5 +1,5 @@
-#linux64 = 0
-macos64 = 0
+linux64 = 0
+#macos64 = 0
 
 ENTRYPOINT	= 0x0
 ENTRYOFFSET	=   0x0
@@ -30,7 +30,7 @@ KERNEL	= kernel.bin
 ASMOBJS		= kernel/kern_a.o kernel/asm.o kernel/interrupt_a.o lib/klib_a.o lib/string_a.o
 COBJS		= kernel/global.o kernel/kmain.o kernel/init.o \
 				kernel/interrupt_c.o kernel/protect.o kernel/i8259_pic.o \
-				lib/klib_c.o kernel/proc.o
+				lib/klib_c.o kernel/proc.o kernel/clock.o
 KOBJS		= $(ASMOBJS) $(COBJS)
 
 DASMOUTPUT	= kernel.bin.asm

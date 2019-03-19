@@ -6,8 +6,6 @@
 #include "archtypes.h"
 #include "archproto.h"
 
-#define DELAY_SCALE 4
-
 void arch_proc_reset(struct proc_s *p_proc, struct proctable_s *p_table)
 {	
 	p_proc->ldt_sele = SELECTOR_LDT0;
@@ -55,51 +53,7 @@ void process_init()
 	tss0.iobase = sizeof(struct tss_s);
 // 汇编代码中，进程切换功能所使用的指针，指向下一个进程的进程表
 	x86_ltr(SELECTOR_TSS0);
-	
-	disp_str("~~~");
-	disp_int(&k_reenter);
-	disp_str("~~~");
-	disp_int(k_reenter);
-	disp_str("~~~");
-	disp_int(k_Stacktop);
-	disp_str("~~~");
-	
-    restart();
-
-	while(1){}
 }
 
-// 测试用的进程体
-void TestA()
-{
-	int i = 0x0;
-	while(1){
-		disp_str("A");
-		disp_int(i++);
-		disp_str("...");
-		delay(DELAY_SCALE);
-	}
-}
 
-void TestB()
-{
-	int i = 0x1000;
-	while(1){
-		disp_str("B");
-		disp_int(i++);
-		disp_str("...");
-		delay(DELAY_SCALE);
-	}
-}
-
-void TestC()
-{
-	int i = 0x2000;
-	while(1){
-		disp_str("C");
-		disp_int(i++);
-		disp_str("...");
-		delay(DELAY_SCALE);
-	}
-}
 

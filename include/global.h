@@ -2,6 +2,7 @@
 #include "type.h"
 #include "const.h"
 #include "archtypes.h"
+#include "interrupt.h"
 #include "proc.h"
 #ifdef _GLOBAL_VAR_
 #undef EXTERN
@@ -17,6 +18,8 @@ EXTERN	struct gatedesc_s 	idt[IDT_SIZE];
 
 EXTERN	u8_t 				k_Stack[K_STACK_SIZE];
 extern 	u32_t				k_Stacktop;
+
+extern	irq_handler			irq_table[];
 
 EXTERN  struct tss_s 		tss0;
 EXTERN  struct proc_s	  	PCB[NR_PROCS];

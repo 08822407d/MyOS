@@ -12,8 +12,8 @@
     #define INT2_CTLMASK            0xA1
 
     /* 中断向量 */
-    #define	IRQ0_VECTOR			0x20	/* 按LINUX的习惯16个硬中断号 */
-    #define	IRQ8_VECTOR			0x28    /* 重新设置为0x20到0x2F     */
+    #define	IRQ0_VECTOR			    0x20	/* 按LINUX的习惯16个硬中断号 */
+    #define	IRQ8_VECTOR			    0x28    /* 重新设置为0x20到0x2F     */
 
     /* 一些魔数 */
     #define END_OF_INT              0x20	/* EOI，用于恢复中断信号接收 */
@@ -55,6 +55,7 @@
     // 奔腾增加内容
     #define INTVEC_SIMD_EXCEPTION   19      /* #XM  SIMD浮点异常 */
 
+    #define NR_IRQS                 16
     /* PC/AT的中断号 */
     #define CLOCK_IRQ               0
     #define KEYBOARD_IRQ            1

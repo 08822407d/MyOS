@@ -191,21 +191,7 @@ void exception_handler(u32_t vec_nr,u32_t err_code,u32_t eip,u32_t cs,u32_t efla
 /*======================================================================*
                            	(目前临时的)硬中断处理
  *======================================================================*/
-void irq_handler(u32_t irq)
-{
-	switch (irq)
-	{
-		case CLOCK_IRQ:
-			clock_handler();
-			break;
-	
-		default:
-			spurious_irq(irq);
-			break;
-	}
-}
-
-void spurious_irq(u32_t irq)
+PUBLIC void spurious_irq(u32_t irq)
 {
 	disp_str("spurious_irq: ");
 	disp_int(irq);
@@ -215,12 +201,11 @@ void spurious_irq(u32_t irq)
 /*======================================================================*
                            put_irq_handler
  *======================================================================*/
-/*
 PUBLIC void put_irq_handler(int irq, irq_handler handler)
 {
-	disable_irq(irq);
+	irq_i8259A_mask(irq);
 	irq_table[irq] = handler;
 }
-*/
+
 
  

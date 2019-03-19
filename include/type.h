@@ -32,7 +32,7 @@
     typedef uint32_t    reg_t;
 
     typedef	void    (*idt_handler)();           // 中断、异常处理函数原型
- //   typedef	void	(*irq_handler)(u32_t irq);  // 中断处理函数
+    typedef	void	(*irq_handler)(u32_t irq);  // 中断处理函数
     typedef	void	(*proc_f)     ();           // 进程体入口
 
     #define NULL    0

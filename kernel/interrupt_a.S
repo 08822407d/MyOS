@@ -13,6 +13,7 @@ extern	clock_handler
 
 extern	k_reenter
 extern	k_Stacktop
+extern	irq_table
 extern	p_proc_ready
 extern	tss0
 
@@ -79,9 +80,9 @@ undef_exception:
 		out dx,al
 
 		sti
-;        push %1
-        call clock_handler
-;        pop  ecx
+        push %1
+        call [irq_table + 4 * %1]
+        pop  ecx
 		cli
 		
 		mov dx,INT_CTLMASK
@@ -133,7 +134,7 @@ hwint07:                	; irq 7 (打印机)
 
 		sti
         push 	%1
-        call 	irq_handler
+        call 	[irq_table + 4 * %1]
         pop  	ecx
 		cli
 		

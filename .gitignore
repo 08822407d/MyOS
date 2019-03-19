@@ -8,3 +8,5 @@ bochsout.txt
 *.d
 *.DS_Store
 *.lock
+*.json
+*/*.json

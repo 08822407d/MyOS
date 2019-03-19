@@ -55,10 +55,11 @@
 
 /* --------------------------iintel 8259A----------------------------- */
     void init_i8259A(void);
-    void irq_8259_unmask(const u32_t);
-    void irq_8259_mask(const u32_t);
-    void irq_8259_eoi(u32_t);
+    void irq_i8259A_unmask(const u32_t);
+    void irq_i8259A_mask(const u32_t);
+    void irq_i8259A_eoi(u32_t);
     void i8259A_disable(void);
+    void irq_i8259A_disable(u32_t irq);
     
 /* --------------------------X86架构相关的操作----------------------------- */
     void init_segdesc(struct segdesc_s* seg_dp, u32_t base,u32_t size, u32_t attr);

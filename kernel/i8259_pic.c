@@ -36,13 +36,13 @@ PUBLIC void init_i8259A()
 }
 
 
-PUBLIC void irq_8259_unmask(const u32_t irq)
+PUBLIC void irq_i8259A_unmask(const u32_t irq)
 {
 	const u8_t ctl_mask = irq < 8 ? INT_CTLMASK : INT2_CTLMASK;
 	out_b(ctl_mask, in_b(ctl_mask) & ~(1 << (irq & 0x7)));
 }
 
-PUBLIC void irq_8259_mask(const u32_t irq)
+PUBLIC void irq_i8259A_mask(const u32_t irq)
 {
 	const u8_t ctl_mask = irq < 8 ? INT_CTLMASK : INT2_CTLMASK;
 	out_b(ctl_mask, in_b(ctl_mask) | (1 << (irq & 0x7)));
@@ -55,22 +55,21 @@ PUBLIC void i8259A_disable(void)
 	out_b(INT_CTLMASK, 0xFF);
 	in_b(INT_CTLMASK);
 }
-
 /*---------------------------EOI(中断结束恢复接收)-------------------------*/
-PUBLIC void irq_8259_eoi(u32_t irq)
+PUBLIC void irq_i8259A_eoi(u32_t irq)
 {
 	if (irq < 8)
-		eoi_8259_master();
+		eoi_i8259A_master();
 	else
-		eoi_8259_slave();
+		eoi_i8259A_slave();
 }
 
-void eoi_8259_master()
+void eoi_i8259A_master()
 {
 	out_b(INT_CTL, END_OF_INT);
 }
 
-void eoi_8259_slave()
+void eoi_i8259A_slave()
 {
 	out_b(INT_CTL, END_OF_INT);
 	out_b(INT2_CTL, END_OF_INT);

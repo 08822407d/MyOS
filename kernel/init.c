@@ -1,6 +1,8 @@
 #include "global.h"
 #include "klib.h"
+#include "proto.h"
 #include "archproto.h"
+#include "interrupt.h"
 
 
  //系统初始化
@@ -12,6 +14,7 @@ void sys_init()
 
     interrupt_init();
 
+	init_irqtable();
 }
 
 /*===========================================================================*
@@ -19,7 +22,7 @@ void sys_init()
  *===========================================================================*/
 
 /* -----------------------------保护模式初始化-------------------------------- */
-PUBLIC void protect_init()
+void protect_init()
 {
 	/* 先把GDT和IDT的位置清理出来 */
 	memset(gdt, 0, sizeof(gdt));
@@ -45,7 +48,7 @@ PUBLIC void protect_init()
 }
 
 /*--------------------------中断模块的总初始化函数--------------------------*/
-PUBLIC void interrupt_init()
+void interrupt_init()
 {
 	/* 根据两个句柄表设置好IDT里的中断门 */
 	idt_veccpy_exception();
@@ -55,4 +58,12 @@ PUBLIC void interrupt_init()
 
 	/* 初始化好8259中断控制器，并屏蔽全部硬件中断 */
 	init_i8259A();
+}
+
+void init_irqtable()
+{
+	for (int irq = 0; irq < NR_PROCS; irq++)
+	{
+		put_irq_handler(irq, spurious_irq);
+	}
 }

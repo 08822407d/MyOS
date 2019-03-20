@@ -139,7 +139,7 @@
     #define SQUARE_WAVE         0x36            /* ccaammmb, a = access, m = mode, b = BCD */
                                                 /*   11x11, 11 = LSB then MSB, x11 = sq wave */
     #define RATE_GENERATOR      0x34
-    #define TIMER_FREQ          1193182L         /* clock frequency for timer in PC and AT */
+    #define TIMER_FREQ          1193182          /* clock frequency for timer in PC and AT */
     #define TIMER_COUNT(freq)   (TIMER_FREQ/(freq)) /* initial value for counter*/
 
 #endif

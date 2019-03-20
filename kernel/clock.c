@@ -5,7 +5,6 @@
 void clock_handler()
 {   
     ++ticks;
-    
-    p_num++;
-    p_proc_ready = PCB + (p_num % NR_PROCS);
+
+    p_proc_ready = PCB + ((ticks-1) % NR_PROCS);
 }

@@ -12,6 +12,7 @@
     
     EXTERN unsigned int get_ticks();
 
-    PUBLIC void delay(int scale);
+    PUBLIC void delay_loop(int scale);
+    PUBLIC void delay_ms(int milli_second);
     
 #endif

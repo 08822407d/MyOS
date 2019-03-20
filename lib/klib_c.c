@@ -58,3 +58,15 @@ PUBLIC void delay_ms(int milli_second)
 	while((get_ticks()-t)*1000/HZ < milli_second)
 	{}
 }
+
+PUBLIC void delay_loop(int scale)
+{
+	for (int i = 0; i < scale; i++)
+	{
+		for (int j = 0; j < 1000; j++)
+		{
+			for (int k = 0; k < 1000; k++)
+			{}
+		}
+	}
+}

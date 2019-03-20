@@ -9,6 +9,9 @@
     EXTERN void disp_color_str(char * str, u16_t color);
     EXTERN char * itoa(char * str, int num);
     EXTERN void disp_int(int input);
-    PUBLIC void delay(int scale);
+    
+    EXTERN unsigned int get_ticks();
 
+    PUBLIC void delay(int scale);
+    
 #endif

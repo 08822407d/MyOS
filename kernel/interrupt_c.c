@@ -8,7 +8,8 @@
 
 #include "global.h"
 #include "type.h"
-#include "klib.h"
+#include "proto.h"
+#include "syscall.h"
 #include "string.h"
 #include "archtypes.h"
 #include "archproto.h"
@@ -72,6 +73,7 @@ static struct gate_table_s gate_table_exceptions[] =
 	{ kernel_call_entry_orig, KERN_CALL_VECTOR_ORIG, USER_PRIVILEGE },
 	{ ipc_entry_softint_um, IPC_VECTOR_UM, USER_PRIVILEGE },
 	{ kernel_call_entry_um, KERN_CALL_VECTOR_UM, USER_PRIVILEGE },		*/
+	{ sys_call,					INTVEC_SYSCALL,			USER_PRIVILEGE },
 
 	{ NULL, 					0, 						0			   }
 };
@@ -201,11 +203,16 @@ PUBLIC void spurious_irq(u32_t irq)
 /*======================================================================*
                            put_irq_handler
  *======================================================================*/
-PUBLIC void put_irq_handler(int irq, irq_handler handler)
+PUBLIC void put_irq_handler(int irq, irq_handler_f handler)
 {
 	irq_i8259A_mask(irq);
 	irq_table[irq] = handler;
 }
 
-
+PUBLIC void init_irqhandler_table()
+{
+	put_irq_handler(CLOCK_IRQ, clock_handler);
+	
+	irq_i8259A_unmask(0U);
+}
  

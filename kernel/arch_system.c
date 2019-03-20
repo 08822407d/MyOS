@@ -1,7 +1,7 @@
 #include "type.h"
 #include "proc.h"
 #include "global.h"
-#include "const.h"
+#include "archconst.h"
 
 void arch_proc_reset(struct proc_s *p_table, struct proctable_s *p_map)
 {

@@ -27,10 +27,12 @@ INCLUDEFLAGS =
 BOOTSEC	= bootsec.bin loader.bin
 KERNEL	= kernel.bin
 
-ASMOBJS		= kernel/kern_a.o kernel/asm.o kernel/interrupt_a.o lib/klib_a.o lib/string_a.o
+ASMOBJS		= kernel/kern_a.o kernel/asm.o kernel/interrupt_a.o lib/klib_a.o lib/string_a.o \
+				lib/syscall_a.o
 COBJS		= kernel/global.o kernel/kmain.o kernel/init.o \
-				kernel/interrupt_c.o kernel/protect.o kernel/i8259_pic.o \
-				lib/klib_c.o kernel/proc.o kernel/clock.o kernel/test_procs.o
+				kernel/interrupt_c.o kernel/protect.o kernel/i8259_pic.o kernel/i8254_pit.o \
+				lib/klib_c.o kernel/proc.o kernel/clock.o lib/syscall_c.o \
+				kernel/test_procs.o
 KOBJS		= $(ASMOBJS) $(COBJS)
 
 DASMOUTPUT	= kernel.bin.asm

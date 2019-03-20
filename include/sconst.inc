@@ -35,3 +35,7 @@ SELECTOR_CS_KERN equ	0x10
 SELECTOR_DS_KERN equ	0x18
 SELECTOR_TSS0    equ    0x30		; TSS. 从外层跳到内存时 SS 和 ESP 的值从里面获得.
 SELECTOR_LDT0    equ    0x38
+
+INTVEC_SYSCALL   equ    0x80
+
+SC_GET_TICKS     equ    0x00

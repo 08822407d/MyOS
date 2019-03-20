@@ -4,7 +4,7 @@
 
 void clock_handler()
 {   
-    disp_str("#");
+    ++ticks;
     
     p_num++;
     p_proc_ready = PCB + (p_num % NR_PROCS);

@@ -1,6 +1,7 @@
 /* 全局变量和数据结构 */
 #include "type.h"
 #include "const.h"
+#include "archconst.h"
 #include "archtypes.h"
 #include "interrupt.h"
 #include "proc.h"
@@ -19,7 +20,8 @@ EXTERN	struct gatedesc_s 	idt[IDT_SIZE];
 EXTERN	u8_t 				k_Stack[K_STACK_SIZE];
 extern 	u32_t				k_Stacktop;
 
-extern	irq_handler			irq_table[];
+extern	irq_handler_f		irq_table[];
+extern	systcall_f          syscall_table[];
 
 EXTERN  struct tss_s 		tss0;
 EXTERN  struct proc_s	  	PCB[NR_PROCS];
@@ -30,6 +32,9 @@ extern 	int 				k_reenter;
 extern	u32_t    			p_num;
 extern  struct proctable_s	proc_map[];
 extern 	unsigned char* 		p_stacktop;
+
+/* =============================系统变量=============================== */
+extern	unsigned int        ticks;
 
 void TestA(void);
 void TestB(void);

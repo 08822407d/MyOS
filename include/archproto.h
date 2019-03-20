@@ -14,7 +14,6 @@
     extern  void    x86_lltr(u16_t  sele_ldt);
     extern  void    x86_ltr(u16_t   sele_tss);
 
-
 /* --------------------------中断和异常句柄声明----------------------------- */
     extern	void	divide_error();
     extern	void	single_step_exception();
@@ -79,9 +78,14 @@
     void idt_veccpy_exception(void);
     void idt_veccpy_pic(void);
 
-    void process_init();
+    void process_init(void);
 
-/* --------------------------X86架构相关的操作----------------------------- */
+/* --------------------------IRQ_HANDLER----------------------------- */
+    void init_irqhandler_table(void);
+    void put_irq_handler(int irq, irq_handler_f handler);
+
+/* --------------------------TIME----------------------------- */
+    void init_i8254A();
     void clock_handler(void);
 
 #endif

@@ -1,17 +1,20 @@
 #include "global.h"
+#include "const.h"
 #include "archproto.h"
 #include "klib.h"
+#include "syscall.h"
 
-#define DELAY_SCALE 4
+#define DELAYSCALE_MS 1000
 
 void TestA()
 {
 	int i = 0x0;
 	while(1){
-		disp_str("A");
-		disp_int(i++);
-		disp_str("...");
-		delay(DELAY_SCALE);
+		
+		disp_color_str("ticks:#", GREEN);
+		disp_int(get_ticks());
+		disp_color_str("# ", GREEN);
+		delay_ms(DELAYSCALE_MS);
 	}
 }
 
@@ -22,7 +25,7 @@ void TestB()
 		disp_str("B");
 		disp_int(i++);
 		disp_str("...");
-		delay(DELAY_SCALE);
+		delay_ms(DELAYSCALE_MS);
 	}
 }
 
@@ -33,6 +36,6 @@ void TestC()
 		disp_str("C");
 		disp_int(i++);
 		disp_str("...");
-		delay(DELAY_SCALE);
+		delay_ms(DELAYSCALE_MS);
 	}
 }

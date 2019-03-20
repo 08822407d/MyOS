@@ -1,7 +1,3 @@
-;暂时完成
-[BITS	32]
-[SECTION .text]
-
 ; -----------------------------------------------------------------------------
 ; 接口
 ; ---------------------------------
@@ -14,6 +10,7 @@ extern	clock_handler
 extern	k_reenter
 extern	k_Stacktop
 extern	irq_table
+extern	syscall_table
 extern	p_proc_ready
 extern	tss0
 
@@ -38,6 +35,8 @@ global	alignment_check
 global	machine_check
 global	simd_exception
 
+global	sys_call
+
 global  hwint00
 global  hwint01
 global  hwint02
@@ -55,10 +54,14 @@ global  hwint13
 global  hwint14
 global  hwint15
 
+global	restart
+
 global	undef_exception
 global	undef_hwint
 
-global restart
+[BITS	32]
+[SECTION .text]
+
 %include "sconst.inc"
 ; ---------------------------------------------------
 ;未定义异常和IRQ入口
@@ -187,15 +190,15 @@ save:
 		inc dWORD [k_reenter]
 		jnz 	set_restart_reenter
 
-		mov 	eax,esp
+		mov 	esi,esp
 		mov 	esp,[ds:k_Stacktop]
 		push	restart
 		xor		ebp,ebp
-		jmp 	[eax + RETADDR - STACKBASE]
+		jmp 	[esi + RETADDR - STACKBASE]
 		
 set_restart_reenter:
 		push	restart_reenter
-		jmp 	[eax + RETADDR - STACKBASE]
+		jmp 	[esi + RETADDR - STACKBASE]
 
 ; ---------------------------------
 restart:
@@ -276,5 +279,15 @@ exception_entry:
 	hlt
 	iret
 
-; -----------------------------------------------------------------------------
+; =======================================================================================
+;系统调用
+; ---------------------------------
+sys_call:
+	call	save
 
+	sti
+	call	[syscall_table + 4*eax]
+	mov		[esi + EAXREG - STACKBASE],eax
+	cli
+
+	ret

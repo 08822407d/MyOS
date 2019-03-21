@@ -208,11 +208,4 @@ PUBLIC void put_irq_handler(int irq, irq_handler_f handler)
 	irq_i8259A_mask(irq);
 	irq_table[irq] = handler;
 }
-
-PUBLIC void init_irqhandler_table()
-{
-	put_irq_handler(CLOCK_IRQ, clock_handler);
-	
-	irq_i8259A_unmask(0U);
-}
  

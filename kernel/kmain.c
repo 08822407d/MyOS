@@ -21,11 +21,10 @@ PUBLIC void kernel_main()
 
 	process_init();
 
-	init_i8254A();
-
 	init_syscall_table();
 
-	init_irqhandler_table();
+	init_keyboard();
+	init_clock();
 
 	restart();
 

@@ -7,6 +7,8 @@
     #define TIMER0          0x40	/* I/O port for timer channel 0 */
     #define TIMER2          0x42	/* I/O port for timer channel 2 */
     #define TIMER_MODE      0x43	/* I/O port for timer mode control */
+    #define KBD_IO          0x60    /* I/O port for i8042 i/o */
+    #define KBD_CTRL        0x64    /* I/O port for i8042 control */
 
     /* 段类型 */
     #define DUMMY_SEG   0
@@ -141,5 +143,8 @@
     #define RATE_GENERATOR      0x34
     #define TIMER_FREQ          1193182          /* clock frequency for timer in PC and AT */
     #define TIMER_COUNT(freq)   (TIMER_FREQ/(freq)) /* initial value for counter*/
+
+//------------------------------------
+    /* 键盘相关 */
 
 #endif

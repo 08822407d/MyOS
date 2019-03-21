@@ -54,8 +54,8 @@
 
 /* --------------------------iintel 8259A----------------------------- */
     void init_i8259A(void);
-    void irq_i8259A_unmask(const u32_t);
-    void irq_i8259A_mask(const u32_t);
+    void irq_i8259A_unmask(const u32_t irq);
+    void irq_i8259A_mask(const u32_t irq);
     void irq_i8259A_eoi(u32_t);
     void i8259A_disable(void);
     void irq_i8259A_disable(u32_t irq);
@@ -85,8 +85,10 @@
     void put_irq_handler(int irq, irq_handler_f handler);
 
 /* --------------------------TIME----------------------------- */
-    void init_i8254A();
-    void calc_whileloop_per_ms();
-    void clock_handler(void);
+    void init_clock(void);
+    void calc_whileloop_per_ms(void);
+
+/* --------------------------TIME----------------------------- */
+    void init_keyboard(void);
 
 #endif

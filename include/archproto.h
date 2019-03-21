@@ -14,6 +14,9 @@
     extern  void    x86_lltr(u16_t  sele_ldt);
     extern  void    x86_ltr(u16_t   sele_tss);
 
+    extern  void    disable_intr(void);
+    extern  void    enable_intr(void);
+    
 /* --------------------------中断和异常句柄声明----------------------------- */
     extern	void	divide_error();
     extern	void	single_step_exception();

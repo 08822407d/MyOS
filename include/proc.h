@@ -8,7 +8,7 @@
 	#define	RPL_TASK	SA_RPL1
 	#define INIT_PSW	0x1202
 /* 一些常量 */
-	#define NR_PROCS	3
+	#define NR_PROCS	4
 	#define TASK_PROC	TASK_PRIVILEGE
 	#define USER_PROC	USER_PRIVILEGE
 	
@@ -38,15 +38,19 @@
 	PUBLIC void TestB(void);
 	PUBLIC void TestC(void);
 
+	PUBLIC void Task_tty();
+
 	PUBLIC void restart(void);
 /* stacks of tasks */
 	#define STACK_SIZE_TESTA	0x8000
 	#define STACK_SIZE_TESTB	0x8000
 	#define STACK_SIZE_TESTC	0x8000
+	#define STACK_SIZE_TASKTTY	0x8000
 
 	#define STACK_SIZE_TOTAL	(STACK_SIZE_TESTA + \
 				            	STACK_SIZE_TESTB + \
-				            	STACK_SIZE_TESTC)
+				            	STACK_SIZE_TESTC + \
+								STACK_SIZE_TASKTTY)
 
 
 #endif

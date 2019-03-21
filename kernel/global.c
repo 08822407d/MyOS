@@ -18,9 +18,10 @@ PUBLIC  systcall_f          syscall_table[NR_SYSCALL];
 PUBLIC  struct proc_s* 		p_proc_ready = PCB;
 PUBLIC  struct  proctable_s proc_map[NR_PROCS] = 
     {
-        {TestA, STACK_SIZE_TESTA, USER_PROC},
-		{TestB, STACK_SIZE_TESTB, USER_PROC},
-		{TestC, STACK_SIZE_TESTC, USER_PROC}
+        {TestA,     STACK_SIZE_TESTA,   USER_PROC},
+		{TestB,     STACK_SIZE_TESTB,   USER_PROC},
+		{TestC,     STACK_SIZE_TESTC,   USER_PROC},
+        {Task_tty,  STACK_SIZE_TASKTTY, USER_PROC}
     };
 
 /* =============================系统变量============================== */

@@ -1,6 +1,3 @@
-[BITS	32]
-[SECTION .text]
-
 global in_b
 global out_b
 global in_w
@@ -10,6 +7,12 @@ global x86_lgdt
 global x86_lidt
 global x86_lldt
 global x86_ltr
+
+global disable_intr
+global enable_intr
+
+[BITS	32]
+[SECTION .text]
 ;==============================================================================
 ;in/out指令包装
 ;----------------------------------------------------------
@@ -72,3 +75,12 @@ x86_ltr:
 	ltr dx
 	ret
 ;==============================================================================
+;置位/清位指令包装
+;----------------------------------------------------------
+disable_intr:
+	cli
+	ret
+
+enable_intr:
+	sti
+	ret

@@ -65,8 +65,6 @@ PUBLIC void delay_loop(int scale)
 	{
 		for (int j = 0; j < 1000; j++)
 		{
-			for (int k = 0; k < 1000; k++)
-			{}
 		}
 	}
 }

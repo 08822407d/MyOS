@@ -21,8 +21,8 @@
 
 		struct segdesc_s ldt[LDT_SIZE];
 		
-//        	int ticks;
-//        	int priority;
+        unsigned int ticks;
+        unsigned int priority;
 
 		u32_t pid;                          /* process id passed in from MM */
 	};

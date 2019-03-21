@@ -1,5 +1,5 @@
-#linux64 = 0
-macos64 = 0
+linux64 = 0
+#macos64 = 0
 
 ENTRYPOINT	= 0x0
 ENTRYOFFSET	=   0x0

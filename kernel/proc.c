@@ -48,6 +48,10 @@ void process_init()
 		p_proc->pid = i;
 	}
 
+	PCB[0].ticks = PCB[0].priority = 15;
+	PCB[1].ticks = PCB[1].priority = 9;
+	PCB[2].ticks = PCB[2].priority = 3;
+
 	tss0.ss0 = SELECTOR_DS_KRNL;
 	tss0.sp0 = PCB + sizeof(struct stackframe_s);
 	tss0.iobase = sizeof(struct tss_s);

@@ -11,6 +11,7 @@
 #endif
 
 EXTERN	u16_t 				disp_pos;
+EXTERN  u32_t    			whileloops_per_ms;
 
 EXTERN	struct desctabptr_s gdt_desc,
 							idt_desc;
@@ -29,17 +30,22 @@ EXTERN  u8_t 				proc_Stack[STACK_SIZE_TOTAL];
 
 extern 	struct proc_s* 		p_proc_ready; 
 extern 	int 				k_reenter;
-extern	u32_t    			p_num;
+extern	u32_t    			p_count;
 extern  struct proctable_s	proc_map[];
 extern 	unsigned char* 		p_stacktop;
 
 /* =============================系统变量=============================== */
 extern	unsigned int        ticks;
 
-void TestA(void);
-void TestB(void);
-void TestC(void);
-
+/* =============================一次性变量=============================== */
+extern	unsigned int        flag_for_millisecond_ajust;
+extern  unsigned int        start_millisecond_ajusting;
+extern  unsigned int        end_millisecond_ajusting;
+/* =============================一次性变量=============================== */
 /* 宏 */
 /* 线性地址 → 物理地址 */
 #define vir2phys(seg_base, vir)	(u32_t)(((u32_t)seg_base) + (u32_t)(vir))
+
+void 	TestA(void);
+void 	TestB(void);
+void 	TestC(void);

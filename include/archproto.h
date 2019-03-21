@@ -86,6 +86,7 @@
 
 /* --------------------------TIME----------------------------- */
     void init_i8254A();
+    void calc_whileloop_per_ms();
     void clock_handler(void);
 
 #endif

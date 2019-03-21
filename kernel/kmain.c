@@ -26,7 +26,7 @@ PUBLIC void kernel_main()
 	init_syscall_table();
 
 	init_irqhandler_table();
-	
+
 	restart();
 
 	while(1);

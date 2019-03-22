@@ -1,5 +1,5 @@
-#ifndef	_ARCHCONST_H_
-#define	_ARCHCONST_H_
+#ifndef	_MYOS_ARCHCONST_H_
+#define	_MYOS_ARCHCONST_H_
 
     /* Miscellaneous ports. */
     #define PCR		        0x65	/* Planar Control Register */

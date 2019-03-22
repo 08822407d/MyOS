@@ -13,7 +13,5 @@
     EXTERN unsigned int get_ticks();
     PUBLIC void delay_loop(int scale);
     PUBLIC void delay_ms(int milli_second);
-
-    EXTERN void read_kbdbuff();
     
 #endif

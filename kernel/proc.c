@@ -18,12 +18,12 @@ void arch_proc_reset(struct proc_s *p_proc, struct proctable_s *p_table)
 	init_segdesc(&(p_proc->ldt[2]), 0x0, SIZE_4GB, DA_DRW | p_table->proc_type<<DPL_SHIFT);
 
 	//设置stack_frame
-	p_proc->p_reg.cs = SELECTOR_CS_LOCAL;
-	p_proc->p_reg.ds =
-	p_proc->p_reg.es =
-	p_proc->p_reg.fs =
-	p_proc->p_reg.ss = SELECTOR_DS_LOCAL;
-	p_proc->p_reg.gs = SELECTOR_VGARAM;
+	p_proc->p_reg.cs  = SELECTOR_CS_LOCAL;
+	p_proc->p_reg.ds  =
+	p_proc->p_reg.es  =
+	p_proc->p_reg.fs  =
+	p_proc->p_reg.ss  = SELECTOR_DS_LOCAL;
+	p_proc->p_reg.gs  = SELECTOR_VGARAM;
 	p_proc->p_reg.eax =
 	p_proc->p_reg.ebp =
 	p_proc->p_reg.ecx =

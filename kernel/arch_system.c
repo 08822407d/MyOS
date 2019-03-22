@@ -32,8 +32,8 @@ void arch_proc_reset(struct proc_s *p_table, struct proctable_s *p_map)
 	p_table->p_reg.ss 	= 
 	p_table->p_reg.es 	= 
 	p_table->p_reg.ds 	= segtype_ds;
-	p_proc->p_reg.eip = (u32_t)proc_map.initial_eip;
-	p_proc->p_reg.esp = (u32_t)p_proc_stack;
+	p_proc->p_reg.eip	= (u32_t)proc_map.initial_eip;
+	p_proc->p_reg.esp	= (u32_t)p_proc_stack;
 
 	p_table->ldt_sele	= ldttype;
 }

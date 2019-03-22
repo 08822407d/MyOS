@@ -1,5 +1,5 @@
-#ifndef _ARCHPROTO_H_
-#define _ARCHPROTO_H_
+#ifndef _MYOS_ARCHPROTO_H_
+#define _MYOS_ARCHPROTO_H_
 
     #include "type.h"
 
@@ -64,10 +64,8 @@
     void irq_i8259A_disable(u32_t irq);
     
 /* --------------------------X86架构相关的操作----------------------------- */
-    void init_segdesc(struct segdesc_s* seg_dp, u32_t base,u32_t size, u32_t attr);
-
-    void init_param_dataseg(struct segdesc_s *seg_dp,
-							u32_t base, u32_t size,	u32_t privilege);
+    void init_segdesc(struct segdesc_s *seg_dp, u32_t base, u32_t size, u32_t attr);
+    void init_param_dataseg(struct segdesc_s *seg_dp, u32_t base, u32_t size, u32_t privilege);
     void init_codeseg(u32_t index, u32_t privilege);
     void init_dataseg(u32_t index, u32_t privilege);
     void init_dummyseg(u32_t);

@@ -1,11 +1,11 @@
-#include "global.h"
 #include "archproto.h"
+#include "global.h"
 #include "klib.h"
 
 void schedule(void);
 
 void clock_handler()
-{   
+{
     ++ticks;
     p_proc_ready->ticks--;
 
@@ -24,10 +24,10 @@ void clock_handler()
 
 void schedule()
 {
-    struct proc_s* p;
+    struct proc_s *p;
     unsigned int biggest_ticks = 0;
 
-    while(!biggest_ticks)
+    while (!biggest_ticks)
     {
         for (p = PCB; p < PCB + NR_PROCS; p++)
         {
@@ -35,7 +35,7 @@ void schedule()
             {
                 biggest_ticks = p->ticks;
                 p_proc_ready = p;
-            }   
+            }
         }
 
         if (!biggest_ticks)
@@ -44,7 +44,6 @@ void schedule()
             {
                 p->ticks = p->priority;
             }
-            
         }
     }
 }
@@ -55,6 +54,6 @@ PUBLIC void init_clock()
     out_b(TIMER0, (u8_t)(TIMER_FREQ / HZ));
     out_b(TIMER0, (u8_t)((TIMER_FREQ / HZ) >> 8));
 
-	put_irq_handler(CLOCK_IRQ, clock_handler);	
-	irq_i8259A_unmask(CLOCK_IRQ);
+    put_irq_handler(CLOCK_IRQ, clock_handler);
+    irq_i8259A_unmask(CLOCK_IRQ);
 }

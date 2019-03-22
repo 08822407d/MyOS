@@ -10,8 +10,8 @@
 /*    It should be and can only be included by keyboard.c!          */
 /********************************************************************/
 
-#ifndef	_KEYMAP_H_
-#define	_KEYMAP_H_
+#ifndef	_MYOS_KEYMAP_H_
+#define	_MYOS_KEYMAP_H_
 
     #include "type.h"
     #include "keyboard.h"

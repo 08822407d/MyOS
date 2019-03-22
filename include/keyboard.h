@@ -5,8 +5,8 @@
                                            Forrest Yu, December, 2003
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 
-#ifndef	_ORANGES_KEYBOARD_H_
-#define	_ORANGES_KEYBOARD_H_
+#ifndef	_MYOS_KEYBOARD_H_
+#define	_MYOS_KEYBOARD_H_
 
 
 /************************************************************************/

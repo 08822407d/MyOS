@@ -7,6 +7,8 @@
 #include "keyboard.h"
 #include "keymap.h"
 
+void disp_printable_key(u32_t);
+
 PRIVATE struct kbd_s kbd_in;
 
 PRIVATE int code_with_E0 = 0;
@@ -162,18 +164,33 @@ PUBLIC u32_t parse_scancode()
                 key = 0;
                 break;
             default:
-                if (!make)
-                {
-                    key = 0;
-                }
                 break;
             }
+
+            if (make)
+            {
+                key |= shift_l  ?   FLAG_SHIFT_L : 0;
+                key |= shift_r  ?   FLAG_SHIFT_R : 0;
+                key |= ctrl_l   ?   FLAG_CTRL_L  : 0;
+                key |= ctrl_r   ?   FLAG_CTRL_R  : 0;
+                key |= alt_l    ?   FLAG_ALT_L   : 0;
+                key |= alt_r    ?   FLAG_ALT_R   : 0;
+
+                disp_printable_key(key);
+            }
         }
-        if (key)
-        {
-            output[0] = key;
-            disp_str(output);
-        }
+    }
+
+    return key;
+}
+
+void disp_printable_key(u32_t key)
+{
+    unsigned char output[2] = {0,0};
+    if (!(key & FLAG_EXT))
+    {
+        output[0] = key & 0xFF;
+        disp_str(output);
     }
 }
 

@@ -15,17 +15,18 @@
 
 	struct proc_s
 	{
-		struct stackframe_s p_reg;   		/* process registers saved in stack frame */
+		STACK_FRAME_t p_reg;   		/* process registers saved in stack frame */
 
 		u32_t ldt_sele;                     /* gdt selector giving ldt base and limit */
 
-		struct segdesc_s ldt[LDT_SIZE];
+		SEG_DESC_t ldt[LDT_SIZE];
 		
         unsigned int ticks;
         unsigned int priority;
 
 		u32_t pid;                          /* process id passed in from MM */
 	};
+	typedef struct proc_s PROC_t;
 
 	struct proctable_s
 	{
@@ -33,6 +34,7 @@
 		int		stacksize;
 		u32_t	proc_type;
 	};
+	typedef struct proctable_s PROC_TABLE_t;
 
 	PUBLIC void TestA(void);
 	PUBLIC void TestB(void);
@@ -52,5 +54,4 @@
 				            	STACK_SIZE_TESTC + \
 								STACK_SIZE_TASKTTY)
 
-
-#endif
+#endif /* _MYOS_PROC_H_ */

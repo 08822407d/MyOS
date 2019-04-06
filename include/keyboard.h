@@ -1,9 +1,4 @@
-
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-                              keyboard.h
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-                                           Forrest Yu, December, 2003
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+// 直接挪用orange's的keyboard常量
 
 #ifndef	_MYOS_KEYBOARD_H_
 #define	_MYOS_KEYBOARD_H_
@@ -129,4 +124,4 @@ struct kbd_s {
 
 
 
-#endif /* _ORANGES_KEYBOARD_H_ */
+#endif /* _MYOS_KEYBOARD_H_ */

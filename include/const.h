@@ -10,4 +10,4 @@
     #define IDT_SIZE    256
     #define LDT_SIZE    3
 
-#endif
+#endif /* _MyOS_CONST_H_ */

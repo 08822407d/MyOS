@@ -14,6 +14,7 @@
       u8_t  granularity;	    /* 段属性2：G(1位) D(1位) 0(1位) AVL(1位) 段界限16-19位(4位) */
       u8_t  base_high;			  /* 段基址24-31位 */
   } __attribute__((packed));
+  typedef struct segdesc_s SEG_DESC_t;
 
   /* i386门描述符 */
   struct gatedesc_s
@@ -24,6 +25,7 @@
     u8_t  p_dpl_type;				  /* 门属性：P(1位) DPL(2位) DT(1位) TYPE(4位) */
     u16_t offset_high;		    /* 段内偏移地址16-31位 */
   } __attribute__((packed));
+  typedef struct gatedesc_s GATE_DESC_t;
 
   /* i386描述符表指针（GDT、IDT） */
   struct desctabptr_s
@@ -31,6 +33,7 @@
     u16_t limit;                /* 表界限 */
     u32_t base;                 /* 表基址 */
   } __attribute__((packed));
+  typedef struct desctabptr_s DESCTAB_PTR_t;
 
   /* prototype of an interrupt vector table entry */
   struct gate_table_s
@@ -39,6 +42,7 @@
 	  u16_t vec_nr;
 	  u16_t privilege;
   };
+  typedef struct gate_table_s GATE_TABLE_t;
 
   struct cpu_info {
 	  u8_t	vendor;
@@ -79,6 +83,7 @@
     u16_t iobase;
   /* u8_t iomap[0]; */
   } __attribute__((packed));
+typedef struct tss_s TSS_t;
 
   struct stackframe_s
 	{	                  /* proc_ptr points here		↑   Low			*/
@@ -101,5 +106,6 @@
 		u32_t	esp;		    /* ┃						│			                */
 		u32_t	ss;		      /* ┛						┷   High			        */
 	};
+  typedef struct stackframe_s STACK_FRAME_t;
 
 #endif /* #ifndef _I386_TYPES_H_ */

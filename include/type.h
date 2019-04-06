@@ -45,4 +45,4 @@
     #define FALSE           0
     #define TRUE            1
     
-#endif
+#endif /* _MyOS_TYPE_H_ */

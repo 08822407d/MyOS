@@ -2,6 +2,7 @@
 #define _MYOS_ARCHPROTO_H_
 
     #include "type.h"
+    #include "archtypes.h"
 
 /* --------------------------打包一些汇编指令----------------------------- */
     extern  u8_t    in_b(u16_t  port);
@@ -9,8 +10,8 @@
     extern  u16_t   in_w(u16_t  port);
     extern  void    out_w(u16_t port, u16_t   value);
 
-    extern  void    x86_lgdt(struct desctabptr_s*);
-    extern  void    x86_lidt(struct desctabptr_s*);
+    extern  void    x86_lgdt(DESCTAB_PTR_t*);
+    extern  void    x86_lidt(DESCTAB_PTR_t*);
     extern  void    x86_lltr(u16_t  sele_ldt);
     extern  void    x86_ltr(u16_t   sele_tss);
 
@@ -64,8 +65,8 @@
     void irq_i8259A_disable(u32_t irq);
     
 /* --------------------------X86架构相关的操作----------------------------- */
-    void init_segdesc(struct segdesc_s *seg_dp, u32_t base, u32_t size, u32_t attr);
-    void init_param_dataseg(struct segdesc_s *seg_dp, u32_t base, u32_t size, u32_t privilege);
+    void init_segdesc(SEG_DESC_t* seg_dp, u32_t base, u32_t size, u32_t attr);
+    void init_param_dataseg(SEG_DESC_t* seg_dp, u32_t base, u32_t size, u32_t privilege);
     void init_codeseg(u32_t index, u32_t privilege);
     void init_dataseg(u32_t index, u32_t privilege);
     void init_dummyseg(u32_t);

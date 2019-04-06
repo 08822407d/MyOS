@@ -10,37 +10,37 @@
 #define EXTERN
 #endif
 
-EXTERN	u16_t 				disp_pos;
-EXTERN  u32_t    			whileloops_per_ms;
+EXTERN	u16_t 			disp_pos;
+EXTERN  u32_t    		whileloops_per_ms;
 
-EXTERN	struct desctabptr_s gdt_desc,
-							idt_desc;
-EXTERN	struct segdesc_s 	gdt[GDT_SIZE];
-EXTERN	struct gatedesc_s 	idt[IDT_SIZE];
+EXTERN	DESCTAB_PTR_t	gdt_desc,
+						idt_desc;
+EXTERN	SEG_DESC_t	 	gdt[GDT_SIZE];
+EXTERN	GATE_DESC_t	 	idt[IDT_SIZE];
 
-EXTERN	u8_t 				k_Stack[K_STACK_SIZE];
-extern 	u32_t				k_Stacktop;
+EXTERN	u8_t 			k_Stack[K_STACK_SIZE];
+extern 	u32_t			k_Stacktop;
 
-extern	irq_handler_f		irq_table[];
-extern	systcall_f          syscall_table[];
+extern	irq_handler_f	irq_table[];
+extern	systcall_f      syscall_table[];
 
-EXTERN  struct tss_s 		tss0;
-EXTERN  struct proc_s	  	PCB[NR_PROCS];
-EXTERN  u8_t 				proc_Stack[STACK_SIZE_TOTAL];
+EXTERN  TSS_t		 	tss0;
+EXTERN  PROC_t		  	PCB[NR_PROCS];
+EXTERN  u8_t 			proc_Stack[STACK_SIZE_TOTAL];
 
-extern 	struct proc_s* 		p_proc_ready; 
-extern 	int 				k_reenter;
-extern	u32_t    			p_count;
-extern  struct proctable_s	proc_map[];
-extern 	unsigned char* 		p_stacktop;
+extern 	PROC_t* 		p_proc_ready; 
+extern 	int 			k_reenter;
+extern	u32_t    		p_count;
+extern  PROC_TABLE_t	proc_map[];
+extern 	unsigned char* 	p_stacktop;
 
 /* =============================系统变量=============================== */
-extern	unsigned int        ticks;
+extern	unsigned int    ticks;
 
 /* =============================一次性变量=============================== */
-extern	unsigned int        flag_for_millisecond_ajust;
-extern  unsigned int        start_millisecond_ajusting;
-extern  unsigned int        end_millisecond_ajusting;
+extern	unsigned int    flag_for_millisecond_ajust;
+extern  unsigned int    start_millisecond_ajusting;
+extern  unsigned int    end_millisecond_ajusting;
 /* =============================一次性变量=============================== */
 /* 宏 */
 /* 线性地址 → 物理地址 */

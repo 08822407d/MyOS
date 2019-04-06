@@ -24,7 +24,7 @@ void clock_handler()
 
 void schedule()
 {
-    struct proc_s *p;
+    PROC_t *p;
     unsigned int biggest_ticks = 0;
 
     while (!biggest_ticks)

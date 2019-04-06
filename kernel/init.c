@@ -43,7 +43,7 @@ void protect_init()
 	init_codeseg(INDEX_CS_SYSCALL, TASK_PRIVILEGE);
 	init_dataseg(INDEX_DS_SYSCALL, TASK_PRIVILEGE);
 
-	gdt_desc.limit += 8 * sizeof(struct segdesc_s);
+	gdt_desc.limit += 8 * sizeof(SEG_DESC_t);
 	x86_lgdt(&gdt_desc);
 }
 

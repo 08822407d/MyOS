@@ -3,7 +3,7 @@
 #include "global.h"
 #include "archconst.h"
 
-void arch_proc_reset(struct proc_s *p_table, struct proctable_s *p_map)
+void arch_proc_reset(PROC_t* p_table, PROC_TABLE_t* p_map)
 {
 	u16_t segtype_cs,segtype_ds;
 	u16_t ldttype;

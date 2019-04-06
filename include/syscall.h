@@ -12,4 +12,4 @@
     #define SC_GET_TICKS    0x00   
     extern  unsigned int    get_ticks();
 
-#endif
+#endif /* _SYSCALL_H_ */

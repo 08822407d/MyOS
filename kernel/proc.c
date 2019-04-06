@@ -6,7 +6,7 @@
 #include "archtypes.h"
 #include "archproto.h"
 
-void arch_proc_reset(struct proc_s *p_proc, struct proctable_s *p_table)
+void arch_proc_reset(PROC_t* p_proc, PROC_TABLE_t* p_table)
 {	
 	p_proc->ldt_sele = SELECTOR_LDT0;
 	//设置gdt中ldt0和tss0两项
@@ -39,7 +39,7 @@ void arch_proc_reset(struct proc_s *p_proc, struct proctable_s *p_table)
 
 void process_init()
 {
-    struct proc_s* p_proc = PCB;
+    PROC_t* p_proc = PCB;
 
 	for (int i = 0; i < NR_PROCS; i++)
 	{
@@ -54,8 +54,8 @@ void process_init()
 	PCB[3].ticks = PCB[3].priority = 10;
 
 	tss0.ss0 = SELECTOR_DS_KRNL;
-	tss0.sp0 = PCB + sizeof(struct stackframe_s);
-	tss0.iobase = sizeof(struct tss_s);
+	tss0.sp0 = PCB + sizeof(STACK_FRAME_t);
+	tss0.iobase = sizeof(TSS_t);
 // 汇编代码中，进程切换功能所使用的指针，指向下一个进程的进程表
 	x86_ltr(SELECTOR_TSS0);
 }

@@ -13,7 +13,7 @@
  *===========================================================================*/
 
 /* --------------------------部分初始化一个段描述符----------------------------- */
-PUBLIC void set_segdesc(struct segdesc_s *seg_dp, u32_t base, u32_t size)
+PUBLIC void set_segdesc(SEG_DESC_t* seg_dp, u32_t base, u32_t size)
 {
 	/* 初始化段描述符的一部分，默认基址0，根据size设置gran属性 */
 	seg_dp->base_low    = base;
@@ -37,7 +37,7 @@ PUBLIC void set_segdesc(struct segdesc_s *seg_dp, u32_t base, u32_t size)
 }
 
 /* --------------------------设置一个系统段描述符------------------------------ */
-PUBLIC void init_segdesc(struct segdesc_s *seg_dp, u32_t base, u32_t size, u32_t attr)
+PUBLIC void init_segdesc(SEG_DESC_t* seg_dp, u32_t base, u32_t size, u32_t attr)
 {
 	set_segdesc(seg_dp, base, size);
 	seg_dp->access |= attr;
@@ -46,19 +46,19 @@ PUBLIC void init_segdesc(struct segdesc_s *seg_dp, u32_t base, u32_t size, u32_t
 /* 设置tss描述符 */
 PUBLIC void init_tssdesc(u32_t index, u32_t base)
 {
-	set_segdesc(&gdt[index], base, sizeof(struct tss_s));
+	set_segdesc(&gdt[index], base, sizeof(TSS_t));
 	gdt[index].access |= DA_386TSS;
 }
 
 /* 设置ldt描述符 */
 PUBLIC void init_ldtdesc(u32_t index, u32_t base)
 {
-	set_segdesc(&gdt[index], base, sizeof(struct tss_s));
+	set_segdesc(&gdt[index], base, sizeof(TSS_t));
 	gdt[index].access |= DA_LDT;
 }
 
 /* --------------------------设置一个全局段描述符------------------------------ */
-PUBLIC void init_param_dataseg(struct segdesc_s *seg_dp,
+PUBLIC void init_param_dataseg(SEG_DESC_t* seg_dp,
 							   u32_t base, u32_t size, u32_t privilege)
 {
 	/* 设置一个数据段的描述符 */
@@ -69,7 +69,7 @@ PUBLIC void init_param_dataseg(struct segdesc_s *seg_dp,
 			不可执行、向上扩展、权限级别0						*/
 }
 
-PUBLIC void init_param_codeseg(struct segdesc_s *seg_dp,
+PUBLIC void init_param_codeseg(SEG_DESC_t* seg_dp,
 							   u32_t base, u32_t size, u32_t privilege)
 {
 	/* 设置一个数据段的描述符 */
@@ -113,19 +113,19 @@ PUBLIC void init_dummyseg(u32_t index)
 /* -------------------------------初始化TSS------------------------------- */
 PUBLIC void tss_init(u8_t *kernel_stack)
 {
-	struct tss_s *t = &tss0;
-	int index 	= INDEX_TSS0;
-	struct segdesc_s *tssgdt;
+	TSS_t* 		t = &tss0;
+	int 		index = INDEX_TSS0;
+	SEG_DESC_t*	tssgdt;
 
 	tssgdt = &gdt[index];
 
 	init_param_dataseg(tssgdt, (u32_t)t,
-					   sizeof(struct tss_s), KRNL_PRIVILEGE);
+					   sizeof(TSS_t), KRNL_PRIVILEGE);
 	tssgdt->access = PRESENT | (KRNL_PRIVILEGE << DPL_SHIFT) | DA_386TSS;
 
 	/* Build TSS. */
 	memset(t, 0, sizeof(*t));
 	t->ds = t->es = t->fs = t->gs = t->ss0 = SELECTOR_DS_KRNL;
 	t->cs = SELECTOR_CS_KRNL;
-	t->iobase = sizeof(struct tss_s); /* 无io-map */
+	t->iobase = sizeof(TSS_t); /* 无io-map */
 }

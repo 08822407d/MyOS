@@ -25,7 +25,7 @@ extern void disp_int(int input);
 /* 以下两个表用于IDT初始化函数填充中断门 */
 
 /*------------------------------硬件中断句柄表-----------------------------*/
-static struct gate_table_s gate_table_pic[] =
+static GATE_TABLE_t gate_table_pic[] =
 {
 	{ hwint00, 	VECTOR( 0), 	KRNL_PRIVILEGE },
 	{ hwint01, 	VECTOR( 1), 	KRNL_PRIVILEGE },
@@ -47,7 +47,7 @@ static struct gate_table_s gate_table_pic[] =
 };
 
 /*-------------------------------异常句柄表-------------------------------*/
-static struct gate_table_s gate_table_exceptions[] =
+static GATE_TABLE_t gate_table_exceptions[] =
 {
 	{ divide_error, 			INTVEC_DIVIDE, 			KRNL_PRIVILEGE },
 	{ single_step_exception,	INTVEC_DEBUG, 			KRNL_PRIVILEGE },
@@ -107,11 +107,11 @@ char * excep_msg[20] =
  *======================================================================*/
 
 /*-------------------------------设置中断门-------------------------------*/
-void set_int_gate(struct gatedesc_s *tab,
+void set_int_gate(GATE_TABLE_t* tab,
 					u32_t vec_nr, u32_t offset, u32_t dpl_type)
 {
 /* 通用的中断门设置函数 */
-  struct gatedesc_s *id_p;
+  GATE_DESC_t* id_p;
 
   id_p = &(tab[vec_nr]);
   id_p->offset_low = (u16_t)offset;
@@ -127,9 +127,9 @@ void set_int_gate_idt(u32_t vec_nr, u32_t offset, u32_t dpl_type)
 }
 
 /*--------------------按照给定的中断句柄表设置IDT中的中断门-------------------*/
-void idt_veccpy(struct gate_table_s * first)
+void idt_veccpy(GATE_TABLE_t * first)
 {
-	struct gate_table_s * gatetab_p;
+	GATE_TABLE_t* gatetab_p;
 	for (gatetab_p = first; gatetab_p->gate != NULL; gatetab_p++)
 	{
 		set_int_gate(idt, gatetab_p->vec_nr,

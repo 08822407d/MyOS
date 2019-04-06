@@ -1,7 +1,7 @@
 /* klib对外接口 */
 
-#ifndef _KLIB_H_
-#define _KLIB_H_
+#ifndef _MYOS_KLIB_H_
+#define _MYOS_KLIB_H_
 
     #include "type.h"
 
@@ -14,4 +14,4 @@
     PUBLIC void delay_loop(int scale);
     PUBLIC void delay_ms(int milli_second);
     
-#endif
+#endif /* _MYOS_KLIB_H_ */

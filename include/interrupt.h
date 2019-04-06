@@ -1,7 +1,7 @@
 /* IBM PC兼容机的中断相关常量 */
 
-#ifndef _INTERRUPT_H_
-#define _INTERRUPT_H_
+#ifndef _MYOS_INTERRUPT_H_
+#define _MYOS_INTERRUPT_H_
 
 //#if defined(__i386__)
 
@@ -76,4 +76,4 @@
        (((irq) < 8 ? IRQ0_VECTOR : IRQ8_VECTOR) + ((irq) & 0x07))
 
 //#endif /* (CHIP == INTEL) */
-#endif /* _INTERRUPT_H_ */
+#endif /* _MYOS_INTERRUPT_H_ */

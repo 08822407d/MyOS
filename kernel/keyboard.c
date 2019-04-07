@@ -32,7 +32,7 @@ void keyborad_handler()
     {
         *(kbd_in.p_head) = scan_code;
         kbd_in.p_head++;
-        kbd_in.p_head = ((u32_t)(kbd_in.p_head) & KBDUFF_SIZE) +
+        kbd_in.p_head = ((u32_t)(kbd_in.p_head) & (KBDUFF_SIZE-1)) +
                         kbd_in.buf;
         kbd_in.count++;
     }
@@ -46,7 +46,7 @@ PUBLIC u8_t read_kbdbuff()
     {
         scan_code = *(kbd_in.p_tail);
         kbd_in.p_tail++;
-        kbd_in.p_tail = ((u32_t)(kbd_in.p_tail) & KBDUFF_SIZE) +
+        kbd_in.p_tail = ((u32_t)(kbd_in.p_tail) & (KBDUFF_SIZE-1)) +
                         kbd_in.buf;
         kbd_in.count--;
     }

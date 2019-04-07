@@ -3,6 +3,7 @@
 #include "global.h"
 #include "proc.h"
 #include "syscall.h"
+#include "tty.h"
 
 PUBLIC u32_t    k_Stacktop = k_Stack + K_STACK_SIZE;
 
@@ -21,7 +22,11 @@ PUBLIC PROC_TABLE_t     proc_map[NR_PROCS] =
         {TestA, STACK_SIZE_TESTA, USER_PROC},
         {TestB, STACK_SIZE_TESTB, USER_PROC},
         {TestC, STACK_SIZE_TESTC, USER_PROC},
-        {Task_tty, STACK_SIZE_TASKTTY, USER_PROC}};
+        {Task_tty, STACK_SIZE_TASKTTY, USER_PROC}
+    };
+
+PUBLIC TTY_t        tty_table[NR_CONSOLES];
+PUBLIC CONSOLE_t    console_table[NR_CONSOLES];
 
 /* =============================系统变量============================== */
 

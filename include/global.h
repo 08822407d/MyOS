@@ -5,6 +5,8 @@
 #include "archtypes.h"
 #include "interrupt.h"
 #include "proc.h"
+#include "tty.h"
+
 #ifdef _GLOBAL_VAR_
 #undef EXTERN
 #define EXTERN
@@ -34,6 +36,9 @@ extern	u32_t    		p_count;
 extern  PROC_TABLE_t	proc_map[];
 extern 	unsigned char* 	p_stacktop;
 
+EXTERN	TTY_t        	tty_table[];
+EXTERN	CONSOLE_t    	console_table[];
+EXTERN	int          	current_console_idx;
 /* =============================系统变量=============================== */
 extern	unsigned int    ticks;
 

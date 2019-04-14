@@ -27,7 +27,7 @@ PUBLIC PROC_TABLE_t     proc_map[NR_PROCS] =
 
 PUBLIC TTY_t        tty_table[NR_CONSOLES];
 PUBLIC CONSOLE_t    console_table[NR_CONSOLES];
-
+PUBLIC int          current_console_idx = 0;
 /* =============================系统变量============================== */
 
 PUBLIC unsigned int ticks = 0;

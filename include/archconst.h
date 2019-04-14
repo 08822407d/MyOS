@@ -116,6 +116,13 @@
     /* 显示相关 */
     #define VGAROM_BASE     0xB8000
     #define VGAROM_LENTH    0x8000
+    /* VGA */
+    #define	CRTC_ADDR_REG	0x3D4	/* CRT Controller Registers - Addr Register */
+    #define	CRTC_DATA_REG	0x3D5	/* CRT Controller Registers - Data Register */
+    #define	START_ADDR_H	0xC	/* reg index of video mem start addr (MSB) */
+    #define	START_ADDR_L	0xD	/* reg index of video mem start addr (LSB) */
+    #define	CURSOR_H	    0xE	/* reg index of cursor position (MSB) */
+    #define	CURSOR_L	    0xF	/* reg index of cursor position (LSB) */
     /* Color */
     /*
      * e.g. MAKE_COLOR(BLUE, RED)

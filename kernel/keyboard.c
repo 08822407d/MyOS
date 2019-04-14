@@ -1,6 +1,7 @@
 #include "archconst.h"
 #include "archproto.h"
 #include "interrupt.h"
+#include "proto.h"
 #include "klib.h"
 #include "syscall.h"
 
@@ -38,7 +39,7 @@ void keyborad_handler()
     }
 }
 
-PUBLIC u8_t read_kbdbuff()
+u8_t read_kbuf()
 {
     u8_t scan_code = 0;
 
@@ -54,7 +55,7 @@ PUBLIC u8_t read_kbdbuff()
     return scan_code;
 }
 
-PUBLIC u32_t parse_scancode()
+PUBLIC u32_t read_keyboard(TTY_t* tty_ptr)
 {
     char output[2];
     u32_t make;
@@ -64,7 +65,7 @@ PUBLIC u32_t parse_scancode()
 
     if (kbd_in.count > 0)
     {
-        scan_code = read_kbdbuff();
+        scan_code = read_kbuf();
         if (scan_code == 0xE1)
         {
             int i;
@@ -73,7 +74,7 @@ PUBLIC u32_t parse_scancode()
             bool is_pausebrk = TRUE;
             for ( i = 1; i < 6; i++)
             {
-                if (read_kbdbuff() != pausebrk_scode[i])
+                if (read_kbuf() != pausebrk_scode[i])
                 {
                     is_pausebrk = FALSE;
                     break;
@@ -87,26 +88,26 @@ PUBLIC u32_t parse_scancode()
 
         else if (scan_code == 0xE0)
         {
-            scan_code = read_kbdbuff();
+            scan_code = read_kbuf();
             /* printscreen按下 */
             if (scan_code = 0x2A)
             {
-                if (read_kbdbuff() == 0xE0)
+                if (read_kbuf() == 0xE0)
                 {
-                    if (read_kbdbuff() == 0x37)
+                    if (read_kbuf() == 0x37)
                     {
                         key = PRINTSCREEN;
                         make = 1;
                     }
                 }
             }
-            scan_code = read_kbdbuff();
+            scan_code = read_kbuf();
             /* printscreen弹起 */
             if (scan_code = 0xB7)
             {
-                if (read_kbdbuff() == 0xE0)
+                if (read_kbuf() == 0xE0)
                 {
-                    if (read_kbdbuff() == 0xAA)
+                    if (read_kbuf() == 0xAA)
                     {
                         key = PRINTSCREEN;
                         make = 0;
@@ -176,7 +177,7 @@ PUBLIC u32_t parse_scancode()
                 key |= alt_l    ?   FLAG_ALT_L   : 0;
                 key |= alt_r    ?   FLAG_ALT_R   : 0;
 
-                disp_printable_key(key);
+                in_process(tty_ptr, key);
             }
         }
     }

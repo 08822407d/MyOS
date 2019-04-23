@@ -55,7 +55,7 @@ u8_t read_kbuf()
     return scan_code;
 }
 
-PUBLIC u32_t read_keyboard(TTY_t* tty_ptr)
+PUBLIC void read_keyboard(TTY_t* tty_ptr)
 {
     char output[2];
     u32_t make;
@@ -66,6 +66,7 @@ PUBLIC u32_t read_keyboard(TTY_t* tty_ptr)
     if (kbd_in.count > 0)
     {
         scan_code = read_kbuf();
+
         if (scan_code == 0xE1)
         {
             int i;
@@ -121,7 +122,7 @@ PUBLIC u32_t read_keyboard(TTY_t* tty_ptr)
             }
         }
 
-        else
+        if ((key != PAUSEBREAK) && (key != PRINTSCREEN))
         {
             make = (scan_code & FLAG_BREAK ? FALSE : TRUE);
             keyrow = &keymap[(scan_code & 0x7F) * MAP_COLS];
@@ -181,8 +182,6 @@ PUBLIC u32_t read_keyboard(TTY_t* tty_ptr)
             }
         }
     }
-
-    return key;
 }
 
 void disp_printable_key(u32_t key)

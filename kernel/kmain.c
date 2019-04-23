@@ -23,6 +23,8 @@ PUBLIC void kernel_main()
 
 	init_syscall_table();
 
+	init_keyboard();
+
 	init_clock();
 
 	restart();

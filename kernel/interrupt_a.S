@@ -5,6 +5,7 @@ extern	exception_handler
 extern  irq_handler
 extern	spurious_irq
 extern	disp_str
+extern	disp_int
 extern	clock_handler
 
 extern	k_reenter

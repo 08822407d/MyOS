@@ -19,10 +19,10 @@ PUBLIC systcall_f       syscall_table[NR_SYSCALL];
 PUBLIC PROC_t*          p_proc_ready = PCB;
 PUBLIC PROC_TABLE_t     proc_map[NR_PROCS] =
     {
+        {Task_tty, STACK_SIZE_TASKTTY, TASK_PROC},
         {TestA, STACK_SIZE_TESTA, USER_PROC},
         {TestB, STACK_SIZE_TESTB, USER_PROC},
-        {TestC, STACK_SIZE_TESTC, USER_PROC},
-        {Task_tty, STACK_SIZE_TASKTTY, USER_PROC}
+        {TestC, STACK_SIZE_TESTC, USER_PROC}
     };
 
 PUBLIC TTY_t        tty_table[NR_CONSOLES];

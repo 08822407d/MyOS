@@ -19,7 +19,7 @@ PUBLIC void kernel_main()
 {
 	disp_str("now in kmain.\n");
 
-	process_init();
+	init_process();
 
 	init_syscall_table();
 

@@ -40,8 +40,8 @@ void protect_init()
 	/* 2个内核段，一个VGA段，2个进程段 */
 	init_codeseg(INDEX_CS_KRNL, KRNL_PRIVILEGE);
 	init_dataseg(INDEX_DS_KRNL, KRNL_PRIVILEGE);
-	init_codeseg(INDEX_CS_SYSCALL, TASK_PRIVILEGE);
-	init_dataseg(INDEX_DS_SYSCALL, TASK_PRIVILEGE);
+	init_codeseg(INDEX_CS_TASK, TASK_PRIVILEGE);
+	init_dataseg(INDEX_DS_TASK, TASK_PRIVILEGE);
 
 	gdt_desc.limit += 8 * sizeof(SEG_DESC_t);
 	x86_lgdt(&gdt_desc);

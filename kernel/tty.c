@@ -26,7 +26,7 @@ PUBLIC void Task_tty()
     {
         init_tty(tty_ptr);
     }
-
+    
     int idx_thistty = 0;
     while (1)
     {
@@ -136,10 +136,10 @@ void out_char(CONSOLE_t* console_ptr, char ch)
 
 void set_cursor(u32_t cursor_pos)
 {
-    //disable_intr();
+    disable_intr();
     out_b(CRTC_ADDR_REG, CURSOR_H);
     out_b(CRTC_DATA_REG, (cursor_pos >> 8) & 0xFF);
     out_b(CRTC_ADDR_REG, CURSOR_L);
     out_b(CRTC_DATA_REG, cursor_pos & 0xFF);
-    //enable_intr();
+    enable_intr();
 }

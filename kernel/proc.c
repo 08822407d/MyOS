@@ -17,12 +17,19 @@ void arch_proc_reset(PROC_t* p_proc, PROC_TABLE_t* p_table)
 	init_segdesc(&(p_proc->ldt[1]), 0x0, SIZE_4GB, DA_C | p_table->proc_type<<DPL_SHIFT);
 	init_segdesc(&(p_proc->ldt[2]), 0x0, SIZE_4GB, DA_DRW | p_table->proc_type<<DPL_SHIFT);
 
+	u32_t selector_cs = SELECTOR_CS_LOCAL;
+	u32_t selector_ds = SELECTOR_DS_LOCAL;
+	if (p_table->proc_type == TASK_PROC)
+	{
+		selector_cs = SELECTOR_CS_TASK;
+		selector_ds = SELECTOR_DS_TASK;
+	}
 	//设置stack_frame
-	p_proc->p_reg.cs  = SELECTOR_CS_LOCAL;
+	p_proc->p_reg.cs  = selector_cs;
 	p_proc->p_reg.ds  =
 	p_proc->p_reg.es  =
 	p_proc->p_reg.fs  =
-	p_proc->p_reg.ss  = SELECTOR_DS_LOCAL;
+	p_proc->p_reg.ss  = selector_ds;
 	p_proc->p_reg.gs  = SELECTOR_VGARAM;
 	p_proc->p_reg.eax =
 	p_proc->p_reg.ebp =
@@ -37,7 +44,7 @@ void arch_proc_reset(PROC_t* p_proc, PROC_TABLE_t* p_table)
 	p_stacktop -= p_table->stacksize;
 }
 
-void process_init()
+void init_process()
 {
     PROC_t* p_proc = PCB;
 

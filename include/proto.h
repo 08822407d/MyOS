@@ -6,6 +6,8 @@
     
     void spurious_irq(u32_t irq);
 
+    void init_process(void);
+
     void in_process(TTY_t* p_tty, u32_t key);
     
 #endif /* _MYOS_PROTO_H_ */

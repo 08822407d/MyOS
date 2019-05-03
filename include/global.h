@@ -12,6 +12,8 @@
 #define EXTERN
 #endif
 
+#define HALT	while(1){}
+
 EXTERN	u16_t 			disp_pos;
 EXTERN  u32_t    		whileloops_per_ms;
 

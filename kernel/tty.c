@@ -103,12 +103,12 @@ PUBLIC void in_process(TTY_t *tty_ptr, u32_t key)
         case UP:
             if ((key & FLAG_SHIFT_L) || (key & FLAG_SHIFT_R))
             {
-                //disable_int();
+                disable_intr();
                 out_b(CRTC_ADDR_REG, START_ADDR_H);
                 out_b(CRTC_DATA_REG, ((80 * 15) >> 8) & 0xFF);
                 out_b(CRTC_ADDR_REG, START_ADDR_L);
                 out_b(CRTC_DATA_REG, (80 * 15) & 0xFF);
-                //enable_int();
+                enable_intr();
             }
             break;
         case DOWN:

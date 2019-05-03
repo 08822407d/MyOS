@@ -43,14 +43,16 @@ u8_t read_kbuf()
 {
     u8_t scan_code = 0;
 
-    if (kbd_in.count > 0)
-    {
-        scan_code = *(kbd_in.p_tail);
-        kbd_in.p_tail++;
-        kbd_in.p_tail = ((u32_t)(kbd_in.p_tail) & (KBDUFF_SIZE-1)) +
-                        kbd_in.buf;
-        kbd_in.count--;
-    }
+    while (kbd_in.count <= 0)
+    {}
+
+    disable_intr();
+    scan_code = *(kbd_in.p_tail);
+    kbd_in.p_tail++;
+    kbd_in.p_tail = ((u32_t)(kbd_in.p_tail) & (KBDUFF_SIZE - 1)) +
+                    kbd_in.buf;
+    kbd_in.count--;
+    enable_intr();
 
     return scan_code;
 }

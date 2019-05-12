@@ -82,30 +82,39 @@ PUBLIC void in_process(TTY_t *tty_ptr, u32_t key)
     else
     {
         int raw_code = key & MASK_RAW;
-        disp_str("-");
-        disp_int(key);
-        disp_str("-");
-        disp_int(raw_code);
-        disp_str("-");
+
         switch (raw_code)
         {
         case UP:
             if ((key & FLAG_SHIFT_L) || (key & FLAG_SHIFT_R))
             {
-                disable_intr();
-                out_b(CRTC_ADDR_REG, START_ADDR_H);
-                out_b(CRTC_DATA_REG, ((80 * 15) >> 8) & 0xFF);
-                out_b(CRTC_ADDR_REG, START_ADDR_L);
-                out_b(CRTC_DATA_REG, (80 * 15) & 0xFF);
-                enable_intr();
+                scroll_screen(tty_ptr->console_ptr, SCROLL_DOWN);
             }
             break;
         case DOWN:
             if ((key & FLAG_SHIFT_L) || (key & FLAG_SHIFT_R))
             {
-                /* Shift+Down, do nothing */
+                scroll_screen(tty_ptr->console_ptr, SCROLL_UP);
             }
             break;
+        case F1:
+		case F2:
+		case F3:
+		case F4:
+		case F5:
+		case F6:
+		case F7:
+		case F8:
+		case F9:
+		case F10:
+		case F11:
+		case F12:
+			/* Alt + F1~F12 */
+			if ((key & FLAG_ALT_L) || (key & FLAG_ALT_R))
+			{
+				select_console(raw_code - F1);
+			}
+			break;
         default:
             break;
         }

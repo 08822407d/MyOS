@@ -78,7 +78,7 @@ PUBLIC void init_screen(TTY_t* tty_ptr)
 	}
 	else
 	{
-		out_char(tty_ptr->console_ptr, idx_thistty + '0');
+		out_char(tty_ptr->console_ptr, idx_thistty + '1');
 		out_char(tty_ptr->console_ptr, '$');
 	}
 
@@ -117,7 +117,7 @@ PUBLIC void scroll_screen(CONSOLE_t* console_ptr, int direction)
 			console_ptr->this_video_startpos -= SCREEN_WIDTH;
 		}
 	}
-	else if (direction == SCROLL_DN) {
+	else if (direction == SCROLL_DOWN) {
 		if (console_ptr->this_video_startpos + SCREEN_SIZE <
 		    console_ptr->this_console_startpos + console_ptr->this_memsize) {
 			console_ptr->this_video_startpos += SCREEN_WIDTH;

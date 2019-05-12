@@ -67,7 +67,12 @@ PUBLIC void read_keyboard(TTY_t* tty_ptr)
 
     if (kbd_in.count > 0)
     {
+        code_with_E0 = 0;
+
         scan_code = read_kbuf();
+
+        disp_str("--scancode:");
+        disp_int(scan_code);
 
         if (scan_code == 0xE1)
         {
@@ -104,7 +109,6 @@ PUBLIC void read_keyboard(TTY_t* tty_ptr)
                     }
                 }
             }
-            scan_code = read_kbuf();
             /* printscreen弹起 */
             if (scan_code = 0xB7)
             {
@@ -120,13 +124,14 @@ PUBLIC void read_keyboard(TTY_t* tty_ptr)
             /* printscreen以外的键 */
             if (key == 0)
             {
-                key = code_with_E0;
+                code_with_E0 = TRUE;
             }
         }
 
         if ((key != PAUSEBREAK) && (key != PRINTSCREEN))
         {
             make = (scan_code & FLAG_BREAK ? FALSE : TRUE);
+
             keyrow = &keymap[(scan_code & 0x7F) * MAP_COLS];
 
             column = 0;
@@ -145,27 +150,21 @@ PUBLIC void read_keyboard(TTY_t* tty_ptr)
             {
             case SHIFT_L:
                 shift_l = make;
-                key = 0;
                 break;
             case SHIFT_R:
                 shift_r = make;
-                key = 0;
                 break;
             case CTRL_L:
                 ctrl_l = make;
-                key = 0;
                 break;
             case CTRL_R:
                 ctrl_r = make;
-                key = 0;
                 break;
             case ALT_L:
                 alt_l = make;
-                key = 0;
                 break;
             case ALT_R:
                 alt_r = make;
-                key = 0;
                 break;
             default:
                 break;
@@ -173,6 +172,9 @@ PUBLIC void read_keyboard(TTY_t* tty_ptr)
 
             if (make)
             {
+                //disp_str("--key:");
+                //disp_int(key);
+
                 key |= shift_l  ?   FLAG_SHIFT_L : 0;
                 key |= shift_r  ?   FLAG_SHIFT_R : 0;
                 key |= ctrl_l   ?   FLAG_CTRL_L  : 0;
@@ -180,19 +182,11 @@ PUBLIC void read_keyboard(TTY_t* tty_ptr)
                 key |= alt_l    ?   FLAG_ALT_L   : 0;
                 key |= alt_r    ?   FLAG_ALT_R   : 0;
 
+                //disp_int(key);
+
                 in_process(tty_ptr, key);
             }
         }
-    }
-}
-
-void disp_printable_key(u32_t key)
-{
-    unsigned char output[2] = {0,0};
-    if (!(key & FLAG_EXT))
-    {
-        output[0] = key & 0xFF;
-        disp_str(output);
     }
 }
 
@@ -200,6 +194,10 @@ PUBLIC void init_keyboard()
 {
     kbd_in.p_head = kbd_in.p_tail = kbd_in.buf;
     kbd_in.count = 0;
+
+    shift_l	= shift_r =
+	alt_l	= alt_r   = 
+	ctrl_l	= ctrl_r  = 0;
 
     put_irq_handler(KEYBOARD_IRQ, keyborad_handler);
     irq_i8259A_unmask(KEYBOARD_IRQ);

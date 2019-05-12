@@ -5,7 +5,7 @@
 	#define SCREEN_WIDTH    80
     #define SCREEN_SIZE     (SCREEN_WIDTH * 25)
 	#define	SCROLL_UP		1
-	#define	SCROLL_DN		-1
+	#define	SCROLL_DOWN		-1
 
 	#define DEFAULT_TEXT_COLOR WHITE
 

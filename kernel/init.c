@@ -35,8 +35,8 @@ void protect_init()
 	idt_desc.limit = sizeof(idt)-1;
 
 	init_dummyseg(DUMMY_SEG);
-	init_param_dataseg(&gdt[INDEX_VGARAM], VGAROM_BASE,
-						VGAROM_LENTH, USER_PRIVILEGE);
+	init_param_dataseg(&gdt[INDEX_VGARAM], VGARAM_BASE,
+						VGARAM_SIZE, USER_PRIVILEGE);
 	/* 2个内核段，一个VGA段，2个进程段 */
 	init_codeseg(INDEX_CS_KRNL, KRNL_PRIVILEGE);
 	init_dataseg(INDEX_DS_KRNL, KRNL_PRIVILEGE);

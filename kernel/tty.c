@@ -11,14 +11,9 @@
 #define TTY_FIRST   (tty_table)
 #define TTY_END     (tty_table + NR_CONSOLES)
 
-#define DEFAULT_TEXT_COLOR WHITE
-
 void init_tty();
 void tty_do_read(TTY_t*);
 void tty_do_write(TTY_t*);
-bool is_current_console(CONSOLE_t*);
-void out_char(CONSOLE_t* console_ptr, char ch);
-void set_cursor(u32_t cursor_pos);
 
 PUBLIC void Task_tty()
 {
@@ -44,8 +39,7 @@ void init_tty(TTY_t* tty_ptr)
     tty_ptr->inbuff_head_ptr =
     tty_ptr->inbuff_tail_ptr = tty_ptr->inbuff;
 
-    int idx_thistty = tty_ptr - tty_table;
-    tty_ptr->console_ptr = console_table + idx_thistty;
+    init_screen(tty_ptr);
 }
 
 void tty_do_read(TTY_t* tty_ptr)
@@ -68,11 +62,6 @@ void tty_do_write(TTY_t *tty_ptr)
 
         out_char(tty_ptr->console_ptr, ch);
     }
-}
-
-bool is_current_console(CONSOLE_t* console_ptr)
-{
-    return (console_ptr == &console_table[current_console_idx]);
 }
 
 PUBLIC void in_process(TTY_t *tty_ptr, u32_t key)
@@ -121,25 +110,4 @@ PUBLIC void in_process(TTY_t *tty_ptr, u32_t key)
             break;
         }
     }
-}
-
-void out_char(CONSOLE_t* console_ptr, char ch)
-{
-    u8_t* video_ptr = (u8_t*)(VGAROM_BASE + disp_pos);
-
-    *video_ptr++ = ch;
-    *video_ptr++ = DEFAULT_TEXT_COLOR;
-    disp_pos += 2;
-
-    set_cursor(disp_pos / 2);
-}
-
-void set_cursor(u32_t cursor_pos)
-{
-    disable_intr();
-    out_b(CRTC_ADDR_REG, CURSOR_H);
-    out_b(CRTC_DATA_REG, (cursor_pos >> 8) & 0xFF);
-    out_b(CRTC_ADDR_REG, CURSOR_L);
-    out_b(CRTC_DATA_REG, cursor_pos & 0xFF);
-    enable_intr();
 }

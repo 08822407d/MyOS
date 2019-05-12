@@ -114,8 +114,8 @@
 
 //------------------------------------
     /* 显示相关 */
-    #define VGAROM_BASE     0xB8000
-    #define VGAROM_LENTH    0x8000
+    #define VGARAM_BASE     0xB8000
+    #define VGARAM_SIZE     0x8000
     /* VGA */
     #define	CRTC_ADDR_REG	0x3D4	/* CRT Controller Registers - Addr Register */
     #define	CRTC_DATA_REG	0x3D5	/* CRT Controller Registers - Data Register */

@@ -25,6 +25,9 @@ PRIVATE int scroll_lock;
 
 PRIVATE int column;
 
+/*======================================================================*
+                        keyboard_handler
+ *======================================================================*/
 void keyborad_handler()
 {
     u8_t scan_code = in_b(KBD_IO);
@@ -39,6 +42,52 @@ void keyborad_handler()
     }
 }
 
+
+/*======================================================================*
+				        kb_wait
+ *======================================================================*/
+void kbd_wait()	/* 等待 8042 的输入缓冲区空 */
+{
+	u8_t kbd_stat;
+
+	do {
+		kbd_stat = in_b(KBD_CTRL);
+	} while (kbd_stat & 0x02);
+}
+
+
+/*======================================================================*
+				        kb_ack
+ *======================================================================*/
+PRIVATE void kbd_ack()
+{
+	u8_t kbd_read;
+
+	do
+    {
+		kbd_read = in_b(KBD_IO);
+	} while (kbd_read =! KBD_ACK);
+}
+
+/*======================================================================*
+				        set_leds
+ *======================================================================*/
+PRIVATE void set_leds()
+{
+	u8_t leds = (caps_lock << 2) | (num_lock << 1) | scroll_lock;
+
+	kbd_wait();
+	out_b(KBD_IO, KBD_LED);
+	kbd_ack();
+
+	kbd_wait();
+	out_b(KBD_IO, leds);
+	kbd_ack();
+}
+
+/*======================================================================*
+			            read_kbuf
+ *======================================================================*/
 u8_t read_kbuf()
 {
     u8_t scan_code = 0;
@@ -57,6 +106,9 @@ u8_t read_kbuf()
     return scan_code;
 }
 
+/*======================================================================*
+                           read_keyboard
+*======================================================================*/
 PUBLIC void read_keyboard(TTY_t* tty_ptr)
 {
     char output[2];
@@ -168,8 +220,29 @@ PUBLIC void read_keyboard(TTY_t* tty_ptr)
             case ALT_R:
                 alt_r = make;
                 break;
-            default:
-                break;
+            case CAPS_LOCK:
+				if (make)
+                {
+					caps_lock   = !caps_lock;
+					set_leds();
+				}
+				break;
+			case NUM_LOCK:
+				if (make)
+                {
+					num_lock    = !num_lock;
+					set_leds();
+				}
+				break;
+			case SCROLL_LOCK:
+				if (make)
+                {
+					scroll_lock = !scroll_lock;
+					set_leds();
+				}
+				break;
+			default:
+				break;
             }
 
             if (make)
@@ -177,21 +250,101 @@ PUBLIC void read_keyboard(TTY_t* tty_ptr)
                 //disp_str("--key:");
                 //disp_int(key);
 
+                int pad = 0;
+
+				/* 首先处理小键盘 */
+				if ((key >= PAD_SLASH) && (key <= PAD_9))
+                {
+					pad = 1;
+					switch(key)
+                    {
+					case PAD_SLASH:
+						key = '/';
+						break;
+					case PAD_STAR:
+						key = '*';
+						break;
+					case PAD_MINUS:
+						key = '-';
+						break;
+					case PAD_PLUS:
+						key = '+';
+						break;
+					case PAD_ENTER:
+						key = ENTER;
+						break;
+					default:
+						if (num_lock &&
+						    (key >= PAD_0) &&
+						    (key <= PAD_9))
+                        {
+							key = key - PAD_0 + '0';
+						}
+						else if (num_lock &&
+                                    (key == PAD_DOT))
+                        {
+							key = '.';
+						}
+                        else
+                        {
+							switch(key)
+                            {
+							case PAD_HOME:
+								key = HOME;
+								break;
+							case PAD_END:
+								key = END;
+								break;
+							case PAD_PAGEUP:
+								key = PAGEUP;
+								break;
+							case PAD_PAGEDOWN:
+								key = PAGEDOWN;
+								break;
+							case PAD_INS:
+								key = INSERT;
+								break;
+							case PAD_UP:
+								key = UP;
+								break;
+							case PAD_DOWN:
+								key = DOWN;
+								break;
+							case PAD_LEFT:
+								key = LEFT;
+								break;
+							case PAD_RIGHT:
+								key = RIGHT;
+								break;
+							case PAD_DOT:
+								key = DELETE;
+								break;
+							default:
+								break;
+							}
+                        }
+                        break;
+                    }
+                }
+
                 key |= shift_l  ?   FLAG_SHIFT_L : 0;
                 key |= shift_r  ?   FLAG_SHIFT_R : 0;
                 key |= ctrl_l   ?   FLAG_CTRL_L  : 0;
                 key |= ctrl_r   ?   FLAG_CTRL_R  : 0;
                 key |= alt_l    ?   FLAG_ALT_L   : 0;
                 key |= alt_r    ?   FLAG_ALT_R   : 0;
+                key |= pad      ?   FLAG_PAD     : 0;
 
                 //disp_int(key);
-
                 in_process(tty_ptr, key);
             }
         }
     }
 }
 
+/*======================================================================*
+                           init_keyboard
+*======================================================================*/
 PUBLIC void init_keyboard()
 {
     kbd_in.p_head = kbd_in.p_tail = kbd_in.buf;
@@ -200,6 +353,12 @@ PUBLIC void init_keyboard()
     shift_l	= shift_r =
 	alt_l	= alt_r   = 
 	ctrl_l	= ctrl_r  = 0;
+
+    num_lock    = 1;
+    caps_lock   =
+	scroll_lock = 0;
+
+	set_leds();
 
     put_irq_handler(KEYBOARD_IRQ, keyborad_handler);
     irq_i8259A_unmask(KEYBOARD_IRQ);

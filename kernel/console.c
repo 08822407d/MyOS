@@ -5,23 +5,63 @@
 #include "archproto.h"
 #include "tty.h"
 
+/*======================================================================*
+                           	flush
+*======================================================================*/
+void flush(CONSOLE_t* console_ptr)
+{
+    set_cursor(console_ptr->this_cursor);
+    set_video_start_pos(console_ptr->this_video_startpos);
+}
+
+/*======================================================================*
+			   				out_char
+ *======================================================================*/
 PUBLIC void out_char(CONSOLE_t* console_ptr, char ch)
 {
     u8_t* video_ptr = (u8_t*)(VGARAM_BASE + console_ptr->this_cursor * 2);
 
-    *video_ptr++ = ch;
-    *video_ptr++ = DEFAULT_TEXT_COLOR;
-    disp_pos += 2;
+	switch(ch)
+	{
+	case '\n':
+		if (console_ptr->this_cursor < console_ptr->this_console_startpos +
+		    	console_ptr->this_memsize - SCREEN_WIDTH)
+		{
+			console_ptr->this_cursor = console_ptr->this_console_startpos + SCREEN_WIDTH * 
+				((console_ptr->this_cursor - console_ptr->this_console_startpos) /
+				 SCREEN_WIDTH + 1);
+		}
+		break;
+	case '\b':
+		if (console_ptr->this_cursor > console_ptr->this_console_startpos)
+		{
+			console_ptr->this_cursor--;
+			*(video_ptr-2) = ' ';
+			*(video_ptr-1) = DEFAULT_TEXT_COLOR;
+		}
+		break;
+	default:
+		if (console_ptr->this_cursor <
+		    	console_ptr->this_console_startpos + console_ptr->this_memsize - 1)
+		{
+			*video_ptr++ = ch;
+			*video_ptr++ = DEFAULT_TEXT_COLOR;
+			console_ptr->this_cursor++;
+		}
+		break;
+	}
 
-	console_ptr->this_cursor++;
+	while (console_ptr->this_cursor >= console_ptr->this_video_startpos + SCREEN_SIZE) {
+		scroll_screen(console_ptr, SCROLL_DOWN);
+	}
 
-    set_cursor(console_ptr->this_cursor);
+	flush(console_ptr);
 }
 
 /*======================================================================*
-			  set_video_start_addr
+			  		set_video_start_addr
  *======================================================================*/
-PRIVATE void set_video_start_pos(u32_t start_pos)
+void set_video_start_pos(u32_t start_pos)
 {
 	disable_intr();
 	out_b(CRTC_ADDR_REG, START_ADDR_H);
@@ -32,7 +72,7 @@ PRIVATE void set_video_start_pos(u32_t start_pos)
 }
 
 /*======================================================================*
-			    set_cursor
+			    		set_cursor
  *======================================================================*/
 PUBLIC void set_cursor(u32_t cursor_pos)
 {
@@ -45,7 +85,7 @@ PUBLIC void set_cursor(u32_t cursor_pos)
 }
 
 /*======================================================================*
-			   is_current_console
+			   		is_current_console
 *======================================================================*/
 PUBLIC bool is_current_console(CONSOLE_t* console_ptr)
 {
@@ -53,7 +93,7 @@ PUBLIC bool is_current_console(CONSOLE_t* console_ptr)
 }
 
 /*======================================================================*
-			   init_screen
+			   			init_screen
  *======================================================================*/
 PUBLIC void init_screen(TTY_t* tty_ptr)
 {
@@ -68,7 +108,7 @@ PUBLIC void init_screen(TTY_t* tty_ptr)
 	tty_ptr->console_ptr->this_video_startpos	= tty_ptr->console_ptr->this_console_startpos;
 
 	/* 初始化光标位置在最开始处 */
-	tty_ptr->console_ptr->this_cursor		= tty_ptr->console_ptr->this_console_startpos;
+	tty_ptr->console_ptr->this_cursor			= tty_ptr->console_ptr->this_console_startpos;
 
 	if (idx_thistty == 0)
 	{
@@ -86,7 +126,7 @@ PUBLIC void init_screen(TTY_t* tty_ptr)
 }
 
 /*======================================================================*
-			   select_console
+			   			select_console
  *======================================================================*/
 PUBLIC void select_console(int idx_console)	/* 0 ~ (NR_CONSOLES - 1) */
 {
@@ -101,7 +141,7 @@ PUBLIC void select_console(int idx_console)	/* 0 ~ (NR_CONSOLES - 1) */
 }
 
 /*======================================================================*
-			   scroll_screen
+			   			scroll_screen
  *----------------------------------------------------------------------*
  滚屏.
  *----------------------------------------------------------------------*

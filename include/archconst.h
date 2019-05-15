@@ -9,6 +9,8 @@
     #define TIMER_MODE      0x43	/* I/O port for timer mode control */
     #define KBD_IO          0x60    /* I/O port for i8042 i/o */
     #define KBD_CTRL        0x64    /* I/O port for i8042 control */
+    #define KBD_LED         0xED
+    #define KBD_ACK         0xFA
 
     /* 段类型 */
     #define DUMMY_SEG   0

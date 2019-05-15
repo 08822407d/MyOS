@@ -33,8 +33,8 @@ void keyborad_handler()
     {
         *(kbd_in.p_head) = scan_code;
         kbd_in.p_head++;
-        kbd_in.p_head = ((u32_t)(kbd_in.p_head) & (KBDUFF_SIZE-1)) +
-                        kbd_in.buf;
+        if (kbd_in.p_head == kbd_in.buf + KBDUFF_SIZE)
+            kbd_in.p_head = kbd_in.buf;
         kbd_in.count++;
     }
 }
@@ -49,8 +49,8 @@ u8_t read_kbuf()
     disable_intr();
     scan_code = *(kbd_in.p_tail);
     kbd_in.p_tail++;
-    kbd_in.p_tail = ((u32_t)(kbd_in.p_tail) & (KBDUFF_SIZE - 1)) +
-                    kbd_in.buf;
+    if (kbd_in.p_tail == kbd_in.buf + KBDUFF_SIZE)
+        kbd_in.p_tail = kbd_in.buf;
     kbd_in.count--;
     enable_intr();
 
@@ -70,9 +70,6 @@ PUBLIC void read_keyboard(TTY_t* tty_ptr)
         code_with_E0 = 0;
 
         scan_code = read_kbuf();
-
-        disp_str("--scancode:");
-        disp_int(scan_code);
 
         if (scan_code == 0xE1)
         {
@@ -131,6 +128,11 @@ PUBLIC void read_keyboard(TTY_t* tty_ptr)
         if ((key != PAUSEBREAK) && (key != PRINTSCREEN))
         {
             make = (scan_code & FLAG_BREAK ? FALSE : TRUE);
+
+            //disp_str("--scancode:");
+            //disp_int(scan_code);
+            //disp_str("--make:");
+            //disp_int(make);
 
             keyrow = &keymap[(scan_code & 0x7F) * MAP_COLS];
 

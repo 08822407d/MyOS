@@ -17,19 +17,21 @@ void tty_do_write(TTY_t*);
 
 PUBLIC void Task_tty()
 {
-    for (TTY_t* tty_ptr = TTY_FIRST; tty_ptr < TTY_END; tty_ptr++)
+    TTY_t* tty_ptr;
+
+    for (tty_ptr = TTY_FIRST; tty_ptr < TTY_END; tty_ptr++)
     {
         init_tty(tty_ptr);
     }
     
-    int idx_thistty = 0;
+    select_console(0);
     while (1)
     {
-        TTY_t* this_tty = TTY_FIRST + (0x03 & idx_thistty);
-
-        tty_do_read(this_tty);
-        tty_do_write(this_tty);
-        idx_thistty++;
+        for (tty_ptr = TTY_FIRST; tty_ptr < TTY_END; tty_ptr++)
+        {
+            tty_do_read(tty_ptr);
+            tty_do_write(tty_ptr);
+        };
     }
 }
 
@@ -52,12 +54,14 @@ void tty_do_read(TTY_t* tty_ptr)
 
 void tty_do_write(TTY_t *tty_ptr)
 {
-    if (tty_ptr->inbuff_count > 0)
+    if (tty_ptr->inbuff_count)
     {
         char ch = *(tty_ptr->inbuff_tail_ptr);
         tty_ptr->inbuff_tail_ptr++;
-        tty_ptr->inbuff_tail_ptr == ((u32_t)tty_ptr->inbuff_tail_ptr & (TTY_IN_BUF_SIZE - 1)) +
-                                    tty_ptr->inbuff;
+        if (tty_ptr->inbuff_tail_ptr == tty_ptr->inbuff + TTY_IN_BUF_SIZE)
+        {
+            tty_ptr->inbuff_tail_ptr = tty_ptr->inbuff;
+        }
         tty_ptr->inbuff_count--;
 
         out_char(tty_ptr->console_ptr, ch);
@@ -74,8 +78,10 @@ PUBLIC void in_process(TTY_t *tty_ptr, u32_t key)
         {
             *(tty_ptr->inbuff_head_ptr) = key;
             tty_ptr->inbuff_head_ptr++;
-            tty_ptr->inbuff_head_ptr == ((u32_t)tty_ptr->inbuff_head_ptr & (TTY_IN_BUF_SIZE - 1)) +
-                                        tty_ptr->inbuff;
+            if (tty_ptr->inbuff_head_ptr == tty_ptr->inbuff + TTY_IN_BUF_SIZE)
+            {
+                tty_ptr->inbuff_head_ptr = tty_ptr->inbuff;
+            }
             tty_ptr->inbuff_count++;
         }
     }

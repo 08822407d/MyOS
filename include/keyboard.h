@@ -7,7 +7,7 @@
 /************************************************************************/
 /*                          Macros Declaration                          */
 /************************************************************************/
-#define	KBDUFF_SIZE		32			/* size of keyboard input buffer */
+#define	KBDUFF_SIZE		64			/* size of keyboard input buffer */
 #define MAP_COLS		3			/* Number of columns in keymap */
 #define NR_SCAN_CODES	0x80		/* Number of scan codes (rows in keymap) */
 

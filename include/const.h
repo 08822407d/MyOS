@@ -1,7 +1,7 @@
 #ifndef	_MyOS_CONST_H_
 #define	_MyOS_CONST_H_
 
-    #define HZ              50
+    #define HZ              20
     #define K_STACK_SIZE    0x4000
 
     #define NR_CONSOLES     4

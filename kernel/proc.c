@@ -56,9 +56,9 @@ void init_process()
 	}
 
 	PCB[0].ticks = PCB[0].priority = 1;
-	PCB[1].ticks = PCB[1].priority = 2;
-	PCB[2].ticks = PCB[2].priority = 3;
-	PCB[3].ticks = PCB[3].priority = 10;
+	PCB[1].ticks = PCB[1].priority = 1;
+	PCB[2].ticks = PCB[2].priority = 1;
+	PCB[3].ticks = PCB[3].priority = 50;
 
 	tss0.ss0 = SELECTOR_DS_KRNL;
 	tss0.sp0 = PCB + sizeof(STACK_FRAME_t);

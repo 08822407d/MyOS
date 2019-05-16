@@ -15,6 +15,9 @@ void init_tty();
 void tty_do_read(TTY_t*);
 void tty_do_write(TTY_t*);
 
+/*======================================================================*
+				        Task_tty
+ *======================================================================*/
 PUBLIC void Task_tty()
 {
     TTY_t* tty_ptr;
@@ -35,6 +38,9 @@ PUBLIC void Task_tty()
     }
 }
 
+/*======================================================================*
+				        init_tty
+ *======================================================================*/
 void init_tty(TTY_t* tty_ptr)
 {
     tty_ptr->inbuff_count = 0;
@@ -44,6 +50,9 @@ void init_tty(TTY_t* tty_ptr)
     init_screen(tty_ptr);
 }
 
+/*======================================================================*
+				        tty_do_read
+ *======================================================================*/
 void tty_do_read(TTY_t* tty_ptr)
 {
     if (is_current_console(tty_ptr->console_ptr))
@@ -52,6 +61,9 @@ void tty_do_read(TTY_t* tty_ptr)
     }
 }
 
+/*======================================================================*
+				        tty_do_write
+ *======================================================================*/
 void tty_do_write(TTY_t *tty_ptr)
 {
     if (tty_ptr->inbuff_count)
@@ -68,6 +80,9 @@ void tty_do_write(TTY_t *tty_ptr)
     }
 }
 
+/*======================================================================*
+				        put_key
+ *======================================================================*/
 void put_key(TTY_t* tty_ptr, u32_t key)
 {
     if (tty_ptr->inbuff_count < TTY_IN_BUF_SIZE)
@@ -82,27 +97,21 @@ void put_key(TTY_t* tty_ptr, u32_t key)
     }
 }
 
+/*======================================================================*
+				        in_process
+ *======================================================================*/
 PUBLIC void in_process(TTY_t *tty_ptr, u32_t key)
 {
     char output[2] = {'\0', '\0'};
 
     if (!(key & FLAG_EXT))
     {
-        if (tty_ptr->inbuff_count < TTY_IN_BUF_SIZE)
-        {
-            *(tty_ptr->inbuff_head_ptr) = key;
-            tty_ptr->inbuff_head_ptr++;
-            if (tty_ptr->inbuff_head_ptr == tty_ptr->inbuff + TTY_IN_BUF_SIZE)
-            {
-                tty_ptr->inbuff_head_ptr = tty_ptr->inbuff;
-            }
-            tty_ptr->inbuff_count++;
-        }
+        put_key(tty_ptr, key);
     }
     else
     {
         int raw_code = key & MASK_RAW;
-
+        disp_int(key);
         switch (raw_code)
         {
         case ENTER:

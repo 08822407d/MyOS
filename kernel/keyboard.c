@@ -8,22 +8,20 @@
 #include "keyboard.h"
 #include "keymap.h"
 
-void disp_printable_key(u32_t);
-
 PRIVATE struct kbd_s kbd_in;
 
 PRIVATE int code_with_E0 = 0;
-PRIVATE int shift_l;
-PRIVATE int shift_r;
-PRIVATE int alt_l;
-PRIVATE int alt_r;
-PRIVATE int ctrl_l;
-PRIVATE int ctrl_r;
-PRIVATE int caps_lock;
-PRIVATE int num_lock;
-PRIVATE int scroll_lock;
+PRIVATE int shift_l = 0;
+PRIVATE int shift_r = 0;
+PRIVATE int alt_l = 0;
+PRIVATE int alt_r = 0;
+PRIVATE int ctrl_l = 0;
+PRIVATE int ctrl_r = 0;
+PRIVATE int caps_lock = 0;
+PRIVATE int num_lock = 0;
+PRIVATE int scroll_lock = 0;
 
-PRIVATE int column;
+PRIVATE int column = 0;
 
 /*======================================================================*
                         keyboard_handler
@@ -50,29 +48,32 @@ void kbd_wait()	/* 等待 8042 的输入缓冲区空 */
 {
 	u8_t kbd_stat;
 
-	do {
+	do
+    {
 		kbd_stat = in_b(KBD_CTRL);
-	} while (kbd_stat & 0x02);
+	}
+    while (kbd_stat & 0x02);
 }
 
 
 /*======================================================================*
 				        kb_ack
  *======================================================================*/
-PRIVATE void kbd_ack()
+void kbd_ack()
 {
 	u8_t kbd_read;
 
 	do
     {
 		kbd_read = in_b(KBD_IO);
-	} while (kbd_read =! KBD_ACK);
+	}
+    while (kbd_read =! KBD_ACK);
 }
 
 /*======================================================================*
 				        set_leds
  *======================================================================*/
-PRIVATE void set_leds()
+void set_leds()
 {
 	u8_t leds = (caps_lock << 2) | (num_lock << 1) | scroll_lock;
 
@@ -102,7 +103,7 @@ u8_t read_kbuf()
         kbd_in.p_tail = kbd_in.buf;
     kbd_in.count--;
     enable_intr();
-
+    
     return scan_code;
 }
 
@@ -146,8 +147,9 @@ PUBLIC void read_keyboard(TTY_t* tty_ptr)
         else if (scan_code == 0xE0)
         {
             scan_code = read_kbuf();
+
             /* printscreen按下 */
-            if (scan_code = 0x2A)
+            if (scan_code == 0x2A)
             {
                 if (read_kbuf() == 0xE0)
                 {
@@ -159,7 +161,7 @@ PUBLIC void read_keyboard(TTY_t* tty_ptr)
                 }
             }
             /* printscreen弹起 */
-            if (scan_code = 0xB7)
+            if (scan_code == 0xB7)
             {
                 if (read_kbuf() == 0xE0)
                 {
@@ -181,24 +183,27 @@ PUBLIC void read_keyboard(TTY_t* tty_ptr)
         {
             make = (scan_code & FLAG_BREAK ? FALSE : TRUE);
 
-            //disp_str("--scancode:");
-            //disp_int(scan_code);
-            //disp_str("--make:");
-            //disp_int(make);
-
-            keyrow = &keymap[(scan_code & 0x7F) * MAP_COLS];
+            keyrow = &(keymap[(scan_code & 0x7F) * MAP_COLS]);
 
             column = 0;
-            if (shift_l || shift_r)
+			int caps = shift_l || shift_r;
+			if (caps_lock)
             {
-                column = 1;
-            }
-            if (code_with_E0)
+				if ((keyrow[0] >= 'a') && (keyrow[0] <= 'z'))
+                {
+					caps = !caps;
+				}
+			}
+			if (caps)
             {
-                column = 2;
-                code_with_E0 = 0;
-            }
-            key = keyrow[column];
+				column = 1;
+			}
+
+			if (code_with_E0)
+            {
+				column = 2;
+			}
+			key = keyrow[column];
 
             switch (key)
             {
@@ -247,9 +252,6 @@ PUBLIC void read_keyboard(TTY_t* tty_ptr)
 
             if (make)
             {
-                //disp_str("--key:");
-                //disp_int(key);
-
                 int pad = 0;
 
 				/* 首先处理小键盘 */
@@ -335,6 +337,7 @@ PUBLIC void read_keyboard(TTY_t* tty_ptr)
                 key |= alt_r    ?   FLAG_ALT_R   : 0;
                 key |= pad      ?   FLAG_PAD     : 0;
 
+                //disp_str("--key:");
                 //disp_int(key);
                 in_process(tty_ptr, key);
             }

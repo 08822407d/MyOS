@@ -6,9 +6,11 @@
 	#include "archtypes.h"
 	
 	#define	RPL_TASK	SA_RPL1
-	#define INIT_PSW	0x1202
+	#define TASK_PSW	0x1202
+	#define PROC_PSW	0x0202
 /* 一些常量 */
-	#define NR_PROCS	4
+	#define	NR_TASKS	1
+	#define NR_PROCS	3
 	#define TASK_PROC	TASK_PRIVILEGE
 	#define USER_PROC	USER_PRIVILEGE
 	

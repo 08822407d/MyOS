@@ -111,7 +111,6 @@ PUBLIC void in_process(TTY_t *tty_ptr, u32_t key)
     else
     {
         int raw_code = key & MASK_RAW;
-        disp_int(key);
         switch (raw_code)
         {
         case ENTER:

@@ -17,7 +17,11 @@ PUBLIC irq_handler_f    irq_table[NR_IRQS];
 PUBLIC systcall_f       syscall_table[NR_SYSCALL];
 
 PUBLIC PROC_t*          p_proc_ready = PCB;
-PUBLIC PROC_TABLE_t     proc_map[NR_PROCS] =
+PUBLIC PROC_TABLE_t     task_proc_map[0] =
+    {
+        
+    };
+PUBLIC PROC_TABLE_t     user_proc_map[4] =
     {
         {Task_tty, STACK_SIZE_TASKTTY, TASK_PROC},
         {TestA, STACK_SIZE_TESTA, USER_PROC},

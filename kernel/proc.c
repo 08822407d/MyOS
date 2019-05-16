@@ -19,10 +19,12 @@ void arch_proc_reset(PROC_t* p_proc, PROC_TABLE_t* p_table)
 
 	u32_t selector_cs = SELECTOR_CS_LOCAL;
 	u32_t selector_ds = SELECTOR_DS_LOCAL;
+	u32_t psw	  	  = PROC_PSW;
 	if (p_table->proc_type == TASK_PROC)
 	{
 		selector_cs = SELECTOR_CS_TASK;
 		selector_ds = SELECTOR_DS_TASK;
+		psw			= TASK_PSW;
 	}
 	//设置stack_frame
 	p_proc->p_reg.cs  = selector_cs;
@@ -39,7 +41,7 @@ void arch_proc_reset(PROC_t* p_proc, PROC_TABLE_t* p_table)
 	p_proc->p_reg.edi = 0;
 	p_proc->p_reg.esp = p_stacktop;
 	p_proc->p_reg.eip = p_table->initial_eip;
-	p_proc->p_reg.psw = INIT_PSW;
+	p_proc->p_reg.psw = TASK_PSW;
 
 	p_stacktop -= p_table->stacksize;
 }
@@ -48,17 +50,17 @@ void init_process()
 {
     PROC_t* p_proc = PCB;
 
-	for (int i = 0; i < NR_PROCS; i++)
+	for (int i = 0; i < NR_TASKS + NR_PROCS; i++)
 	{
-		arch_proc_reset(&p_proc[i],&proc_map[i]);
+		arch_proc_reset(&p_proc[i],&user_proc_map[i]);
 
 		p_proc->pid = i;
 	}
 
-	PCB[0].ticks = PCB[0].priority = 1;
+	PCB[0].ticks = PCB[0].priority = 10;
 	PCB[1].ticks = PCB[1].priority = 1;
 	PCB[2].ticks = PCB[2].priority = 1;
-	PCB[3].ticks = PCB[3].priority = 50;
+	PCB[3].ticks = PCB[3].priority = 1;
 
 	tss0.ss0 = SELECTOR_DS_KRNL;
 	tss0.sp0 = PCB + sizeof(STACK_FRAME_t);

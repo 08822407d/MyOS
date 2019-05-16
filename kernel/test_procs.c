@@ -15,7 +15,7 @@ void TestA()
 
 		//disp_color_str("A", RED);
 		//disp_str(".");
-		delay_loop(DELAYSCALE);
+		//delay_loop(DELAYSCALE);
 	}
 }
 
@@ -26,7 +26,7 @@ void TestB()
 	{
 		//disp_color_str("B", GREEN);
 		//disp_str(".");
-		delay_loop(DELAYSCALE);
+		//delay_loop(DELAYSCALE);
 	}
 }
 
@@ -37,6 +37,6 @@ void TestC()
 	{
 		//disp_color_str("C", BLUE);
 		//disp_str(".");
-		delay_loop(DELAYSCALE);
+		//delay_loop(DELAYSCALE);
 	}
 }

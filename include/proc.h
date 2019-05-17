@@ -5,14 +5,14 @@
 	#include "type.h"
 	#include "archtypes.h"
 	
-	#define	RPL_TASK	SA_RPL1
-	#define TASK_PSW	0x1202
-	#define PROC_PSW	0x0202
+	#define	RPL_TASK		SA_RPL1
+	#define TASK_PSW		0x1202
+	#define USER_PSW		0x0202
 /* 一些常量 */
-	#define	NR_TASKS	1
-	#define NR_PROCS	3
-	#define TASK_PROC	TASK_PRIVILEGE
-	#define USER_PROC	USER_PRIVILEGE
+	#define	NR_TASK_PROCS	1
+	#define NR_USER_PROCS	3
+	#define TASK_PROC		TASK_PRIVILEGE
+	#define USER_PROC		USER_PRIVILEGE
 	
 
 	struct proc_s

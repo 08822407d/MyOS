@@ -62,7 +62,7 @@ void interrupt_init()
 
 void init_irqtable()
 {
-	for (int irq = 0; irq < NR_PROCS; irq++)
+	for (int irq = 0; irq < NR_IRQS; irq++)
 	{
 		put_irq_handler(irq, spurious_irq);
 	}

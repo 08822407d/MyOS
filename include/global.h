@@ -29,7 +29,7 @@ extern	irq_handler_f	irq_table[];
 extern	systcall_f      syscall_table[];
 
 EXTERN  TSS_t		 	tss0;
-EXTERN  PROC_t		  	PCB[NR_TASKS + NR_PROCS];
+EXTERN  PROC_t		  	PCB[NR_TASK_PROCS + NR_USER_PROCS];
 EXTERN  u8_t 			proc_Stack[STACK_SIZE_TOTAL];
 
 extern 	PROC_t* 		p_proc_ready; 

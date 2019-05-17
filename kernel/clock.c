@@ -2,6 +2,8 @@
 #include "global.h"
 #include "klib.h"
 
+#define NR_PROCS (NR_TASK_PROCS + NR_USER_PROCS)
+
 void schedule(void);
 
 void clock_handler()

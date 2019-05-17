@@ -1,4 +1,0 @@
-console.o: kernel/console.c include/type.h include/proto.h include/type.h \
- include/tty.h include/global.h include/const.h include/archconst.h \
- include/archtypes.h include/interrupt.h include/proc.h \
- include/archconst.h

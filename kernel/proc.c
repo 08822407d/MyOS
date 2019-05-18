@@ -67,17 +67,23 @@ void init_process()
 	{
 		init_task_pcb(&p_proc[i],&task_proc_map[j]);
 		p_proc->pid = i;
+		j++;
 	}
 	for (int j =0 ; i < NR_TASK_PROCS + NR_USER_PROCS; i++)
 	{
 		init_user_pcb(&p_proc[i],&user_proc_map[j]);
 		p_proc->pid = i;
+		j++;
 	}
 
 	PCB[0].ticks = PCB[0].priority = 10;
 	PCB[1].ticks = PCB[1].priority = 1;
 	PCB[2].ticks = PCB[2].priority = 1;
 	PCB[3].ticks = PCB[3].priority = 1;
+	PCB[0].tty_idx = 0;
+	PCB[1].tty_idx = 1;
+	PCB[2].tty_idx = 2;
+	PCB[3].tty_idx = 3;
 
 	tss0.ss0 = SELECTOR_DS_KRNL;
 	tss0.sp0 = PCB + sizeof(STACK_FRAME_t);

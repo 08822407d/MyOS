@@ -154,3 +154,15 @@ PUBLIC void in_process(TTY_t *tty_ptr, u32_t key)
         }
     }
 }
+
+PUBLIC void tty_write(TTY_t* tty_ptr, char* buf, int length)
+{
+    char* p =buf;
+    int  i = length;
+
+    while (i)
+    {
+        out_char(tty_ptr->console_ptr, *p++);
+        i--;
+    }
+}

@@ -285,10 +285,14 @@ exception_entry:
 ; ---------------------------------
 sys_call:
 	call	save
-
+	push	dWORD [p_proc_ready]
 	sti
-	call	[syscall_table + 4*eax]
+
+	push	ecx
+	push	ebx
+	call	[syscall_table + 4 * eax]
+	add		esp, 4 * 3
+
 	mov		[esi + EAXREG - STACKBASE],eax
 	cli
-
 	ret

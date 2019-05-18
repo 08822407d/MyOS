@@ -31,6 +31,8 @@
 
     typedef uint32_t        reg_t;
 
+    typedef	char *			va_list;
+
     typedef	void    (*idt_handler_f)();             // 中断、异常处理函数原型
     typedef	void	(*irq_handler_f)(u32_t irq);    // 中断处理函数
     typedef void    *systcall_f;                    // 系统调用

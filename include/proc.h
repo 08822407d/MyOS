@@ -17,16 +17,19 @@
 
 	struct proc_s
 	{
-		STACK_FRAME_t p_reg;   		/* process registers saved in stack frame */
-
-		u32_t ldt_sele;                     /* gdt selector giving ldt base and limit */
+		/* process registers saved in stack frame */
+		STACK_FRAME_t p_reg;
+		/* gdt selector giving ldt base and limit */
+		u32_t ldt_sele;
 
 		SEG_DESC_t ldt[LDT_SIZE];
 		
         unsigned int ticks;
         unsigned int priority;
+		/* process id passed in from MM */
+		u32_t pid;
 
-		u32_t pid;                          /* process id passed in from MM */
+		u32_t tty_idx;
 	};
 	typedef struct proc_s PROC_t;
 
@@ -34,7 +37,7 @@
 	{
 		proc_f	initial_eip;
 		int		stacksize;
-		u32_t	proc_type;
+		char*	proc_name;
 	};
 	typedef struct proctable_s PROC_TABLE_t;
 

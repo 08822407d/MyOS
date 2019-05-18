@@ -39,3 +39,4 @@ SELECTOR_LDT0    equ    0x38
 INTVEC_SYSCALL   equ    0x80
 
 SC_GET_TICKS     equ    0x00
+SC_WRITE		 equ	0x01

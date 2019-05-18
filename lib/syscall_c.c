@@ -1,15 +1,17 @@
 #include "type.h"
 #include "global.h"
+#include "proto.h"
 #include "klib.h"
 #include "syscall.h"
+#include "tty.h"
 
-/* ===============================系统调用函数================================ */
+/* ===============================时间相关================================ */
 PUBLIC unsigned int sc_get_ticks()
 {
     return ticks;
 }
 
-PUBLIC void sc_ajust_millisecond()
+PUBLIC void sc_adjust_millisecond()
 {
     unsigned int loop_count = 0xFFFF;
     unsigned int t_start = get_ticks();
@@ -22,6 +24,13 @@ PUBLIC void sc_ajust_millisecond()
                         (1000 / HZ);
 }
 
+/* ===============================打印相关================================ */
+PUBLIC unsigned int sc_write(char* buf, int length, PROC_t* proc_ptr)
+{
+    tty_write(&tty_table[proc_ptr->tty_idx], buf, length);
+    return 0;
+}
+
 /* ===============================初始化系统调用================================ */
 PUBLIC void put_syscall(u32_t SYSCALL, systcall_f systemcall)
 {
@@ -31,6 +40,7 @@ PUBLIC void put_syscall(u32_t SYSCALL, systcall_f systemcall)
 PUBLIC void init_syscall_table()
 {
     put_syscall(SC_GET_TICKS, sc_get_ticks);
+    put_syscall(SC_WRITE, sc_write);
 }
 
 PUBLIC void calc_whileloop_per_ms()

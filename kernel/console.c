@@ -10,8 +10,11 @@
 *======================================================================*/
 void flush(CONSOLE_t* console_ptr)
 {
-    set_cursor(console_ptr->this_cursor);
-    set_video_start_pos(console_ptr->this_video_startpos);
+	if (is_current_console(console_ptr))
+	{
+		set_cursor(console_ptr->this_cursor);
+    	set_video_start_pos(console_ptr->this_video_startpos);
+	}
 }
 
 /*======================================================================*
@@ -135,9 +138,7 @@ PUBLIC void select_console(int idx_console)	/* 0 ~ (NR_CONSOLES - 1) */
 	}
 
 	current_console_idx = idx_console;
-
-	set_cursor(console_table[idx_console].this_cursor);
-	set_video_start_pos(console_table[idx_console].this_console_startpos);
+	flush(&console_table[idx_console]);
 }
 
 /*======================================================================*
@@ -166,6 +167,5 @@ PUBLIC void scroll_screen(CONSOLE_t* console_ptr, int direction)
 	else{
 	}
 
-	set_video_start_pos(console_ptr->this_video_startpos);
-	set_cursor(console_ptr->this_cursor);
+	flush(console_ptr);
 }

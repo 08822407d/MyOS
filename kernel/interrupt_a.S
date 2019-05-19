@@ -285,8 +285,8 @@ exception_entry:
 ; ---------------------------------
 sys_call:
 	call	save
-	push	dWORD [p_proc_ready]
 	sti
+	push	dWORD [p_proc_ready]
 
 	push	ecx
 	push	ebx

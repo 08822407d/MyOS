@@ -140,6 +140,8 @@
     #define BRIGHT      0x08    /* 0000 1000 */
     #define MAKE_COLOR(x,y) (x | y) /* MAKE_COLOR(Background,Foreground) */
 
+    #define GRAY        MAKE_COLOR(BLACK,BRIGHT)
+
 //------------------------------------
     /* 时间相关 */
     #define CLOCK_ACK_BIT       0x80            /* PS/2 clock interrupt acknowledge bit */

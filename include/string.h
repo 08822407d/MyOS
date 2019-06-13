@@ -10,4 +10,7 @@
     EXTERN char* strcpy(char* dst_ptr, char* src_ptr);
     EXTERN int	strlen(char* str_ptr);
 
+    #define	phys_copy	memcpy
+    #define	phys_set	memset
+
 #endif /* _MYOS_STRING_H_ */

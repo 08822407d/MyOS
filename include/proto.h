@@ -16,6 +16,7 @@
 
     /* printf.c */
     int printf(const char *fmt, ...);
+    #define	printl	printf
     /* vsprintf.c */
     int vsprintf(char *buf, const char *fmt, va_list args);
     

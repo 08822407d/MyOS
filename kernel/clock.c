@@ -1,6 +1,7 @@
 #include "archproto.h"
 #include "global.h"
 #include "klib.h"
+#include "proc.h"
 
 void clock_handler()
 {

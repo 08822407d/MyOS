@@ -93,4 +93,6 @@
 /* --------------------------TIME----------------------------- */
     void init_keyboard(void);
 
+    void* va2la(int pid, void* va);
+
 #endif

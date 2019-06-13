@@ -17,6 +17,8 @@
 	#define FIRST_PROC	PCB[0]
 	#define LAST_PROC	PCB[NR_TASK_PROCS + NR_USER_PROCS - 1]
 
+	#define proc2pid(x) (x - PCB)
+
 	struct proc_s
 	{
 		/* process registers saved in stack frame */
@@ -44,9 +46,9 @@
 		int has_int_msg;
 
 		/* queue of procs sending messages to this proc */
-		struct proc * q_sending;
+		struct proc_s * q_sending;
 		/* next proc in the sending queue (q_sending) */
-		struct proc * next_sending;
+		struct proc_s * next_sending;
 
 		u32_t tty_idx;
 	};

@@ -14,7 +14,11 @@ PUBLIC u32_t    p_count = 0;
 PUBLIC u8_t *   p_stacktop = proc_Stack + STACK_SIZE_TOTAL;
 
 PUBLIC irq_handler_f    irq_table[NR_IRQS];
-PUBLIC systcall_f       syscall_table[NR_SYSCALL];
+PUBLIC systcall_f       syscall_table[NR_SYSCALL] =
+{
+    sys_sendrec,
+    sys_printx
+};
 
 PUBLIC PROC_t*          p_proc_ready = PCB;
 PUBLIC PROC_TABLE_t     task_proc_map[NR_TASK_PROCS] =

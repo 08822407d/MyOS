@@ -3,21 +3,24 @@
 #include "const.h"
 #include "proc.h"
 #include "klib.h"
+#include "proto.h"
 #include "archtypes.h"
 #include "archproto.h"
+#include "string.h"
+#include "syscall.h"
 
 #define NR_PROCS (NR_TASK_PROCS + NR_USER_PROCS)
 
-void block(struct PROC_t* p);
-void unblock(struct PROC_t* p);
-int  msg_send(struct PROC_t* current, int dest, MESSAGE_t* m);
-int  msg_receive(struct PROC_t* current, int src, MESSAGE_t* m);
+void block(PROC_t* p);
+void unblock(PROC_t* p);
+int  msg_send(PROC_t* current, int dest, MESSAGE_t* m);
+int  msg_receive(PROC_t* current, int src, MESSAGE_t* m);
 int  deadlock(int src, int dest);
 
 /*****************************************************************************
  *                                进程调度
  *****************************************************************************/
-void schedule()
+PUBLIC void schedule()
 {
     PROC_t *p;
     unsigned int biggest_ticks = 0;
@@ -137,35 +140,6 @@ void init_process()
 }
 
 /*****************************************************************************
- *                                schedule
- *****************************************************************************/
-/**
- * <Ring 0> Choose one proc to run.
- * 
- *****************************************************************************/
-PUBLIC void schedule()
-{
-	PROC_t*	p;
-	int		greatest_ticks = 0;
-
-	while (!greatest_ticks) {
-		for (p = &FIRST_PROC; p <= &LAST_PROC; p++) {
-			if (p->p_flags == 0) {
-				if (p->ticks > greatest_ticks) {
-					greatest_ticks = p->ticks;
-					p_proc_ready = p;
-				}
-			}
-		}
-
-		if (!greatest_ticks)
-			for (p = &FIRST_PROC; p <= &LAST_PROC; p++)
-				if (p->p_flags == 0)
-					p->ticks = p->priority;
-	}
-}
-
-/*****************************************************************************
  *                                sys_sendrec
  *****************************************************************************/
 /**
@@ -178,7 +152,7 @@ PUBLIC void schedule()
  * 
  * @return Zero if success.
  *****************************************************************************/
-PUBLIC int sys_sendrec(int function, int src_dest, MESSAGE_t* m, struct proc* p)
+PUBLIC int sys_sendrec(int function, int src_dest, MESSAGE_t* m, PROC_t* p)
 {
 	assert(k_reenter == 0);	/* make sure we are not in ring0 */
 	assert((src_dest >= 0 && src_dest < NR_TASK_PROCS + NR_USER_PROCS) ||
@@ -289,7 +263,7 @@ PUBLIC int ldt_seg_linear(PROC_t* p, int idx)
  *****************************************************************************/
 PUBLIC void* va2la(int pid, void* va)
 {
-	struct proc* p = &PCB[pid];
+	PROC_t* p = &PCB[pid];
 
 	u32_t seg_base = ldt_seg_linear(p, INDEX_CS_LOCAL);
 	u32_t la = seg_base + (u32_t)va;
@@ -326,7 +300,7 @@ PUBLIC void reset_msg(MESSAGE_t* p)
  * 
  * @param p The proc to be blocked.
  *****************************************************************************/
-PRIVATE void block(PROC_t* p)
+void block(PROC_t* p)
 {
 	assert(p->p_flags);
 	schedule();
@@ -341,7 +315,7 @@ PRIVATE void block(PROC_t* p)
  * 
  * @param p The unblocked proc.
  *****************************************************************************/
-PRIVATE void unblock(PROC_t* p)
+void unblock(PROC_t* p)
 {
 	assert(p->p_flags == 0);
 }
@@ -361,7 +335,7 @@ PRIVATE void unblock(PROC_t* p)
  * 
  * @return Zero if success.
  *****************************************************************************/
-PRIVATE int deadlock(int src, int dest)
+int deadlock(int src, int dest)
 {
 	PROC_t* p = PCB + dest;
 	while (1) {
@@ -402,7 +376,7 @@ PRIVATE int deadlock(int src, int dest)
  * 
  * @return Zero if success.
  *****************************************************************************/
-PRIVATE int msg_send(struct proc* current, int dest, MESSAGE_t* m)
+int msg_send(PROC_t* current, int dest, MESSAGE_t* m)
 {
 	PROC_t* sender = current;
 	PROC_t* p_dest = PCB + dest; /* proc dest */
@@ -482,7 +456,7 @@ PRIVATE int msg_send(struct proc* current, int dest, MESSAGE_t* m)
  * 
  * @return  Zero if success.
  *****************************************************************************/
-PRIVATE int msg_receive(struct proc* current, int src, MESSAGE_t* m)
+int msg_receive(PROC_t* current, int src, MESSAGE_t* m)
 {
 	PROC_t* p_who_wanna_recv = current; /**
 						  * This name is a little bit
@@ -646,10 +620,10 @@ PUBLIC void dump_proc(PROC_t* p)
 
 	int dump_len = sizeof(PROC_t);
 
-	out_byte(CRTC_ADDR_REG, START_ADDR_H);
-	out_byte(CRTC_DATA_REG, 0);
-	out_byte(CRTC_ADDR_REG, START_ADDR_L);
-	out_byte(CRTC_DATA_REG, 0);
+	out_b(CRTC_ADDR_REG, START_ADDR_H);
+	out_b(CRTC_DATA_REG, 0);
+	out_b(CRTC_ADDR_REG, START_ADDR_L);
+	out_b(CRTC_DATA_REG, 0);
 
 	sprintf(info, "byte dump of proc_table[%d]:\n", p - PCB); disp_color_str(info, text_color);
 	for (i = 0; i < dump_len; i++) {

@@ -74,7 +74,7 @@ PUBLIC void delay_loop(int scale)
 }
 
 /*======================================================================*
-                        	printf()
+                        	vsprintf()
  *======================================================================*/
 int vsprintf(char *buf, const char *fmt, va_list args)
 {

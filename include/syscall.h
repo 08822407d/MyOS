@@ -2,6 +2,7 @@
 #define _SYSCALL_H_
 
     #include "type.h"
+    #include "proc.h"
     
     #define INTVEC_SYSCALL  0x80
     #define NR_SYSCALL      0x02

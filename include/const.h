@@ -1,6 +1,5 @@
 #ifndef	_MyOS_CONST_H_
 #define	_MyOS_CONST_H_
-    #include "proc.h"
 
     #define HZ              20
     #define K_STACK_SIZE    0x4000
@@ -31,7 +30,7 @@
     #define NO_TASK (NR_TASK_PROCS + NR_USER_PROCS + 20)
 
     /* system call */
-    #define NR_SYS_CALL 3
+    #define NR_SYSCALL 3
 
     /* ipc */
     #define SEND 1

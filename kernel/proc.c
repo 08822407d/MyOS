@@ -6,6 +6,50 @@
 #include "archtypes.h"
 #include "archproto.h"
 
+#define NR_PROCS (NR_TASK_PROCS + NR_USER_PROCS)
+
+void block(struct PROC_t* p);
+void unblock(struct PROC_t* p);
+int  msg_send(struct PROC_t* current, int dest, MESSAGE_t* m);
+int  msg_receive(struct PROC_t* current, int src, MESSAGE_t* m);
+int  deadlock(int src, int dest);
+
+/*****************************************************************************
+ *                                进程调度
+ *****************************************************************************/
+void schedule()
+{
+    PROC_t *p;
+    unsigned int biggest_ticks = 0;
+
+    while (!biggest_ticks)
+    {
+        for (p = PCB; p < PCB + NR_PROCS; p++)
+        {
+			if (p->p_flags == 0)
+			{
+				if (p->ticks > biggest_ticks)
+				{
+					biggest_ticks = p->ticks;
+					p_proc_ready = p;
+				}
+			}
+		}
+
+        if (!biggest_ticks)
+        {
+            for (p = PCB; p < PCB + NR_PROCS; p++)
+            {
+				if (p->p_flags == 0)
+                	p->ticks = p->priority;
+            }
+        }
+    }
+}
+
+/*****************************************************************************
+ *                                初始化PCB
+ *****************************************************************************/
 void init_task_pcb(PROC_t* p_proc, PROC_TABLE_t* p_table)
 {	
 	//设置stack_frame
@@ -91,13 +135,6 @@ void init_process()
 // 汇编代码中，进程切换功能所使用的指针，指向下一个进程的进程表
 	x86_ltr(SELECTOR_TSS0);
 }
-
-
-void block(struct PROC_t* p);
-void unblock(struct PROC_t* p);
-int  msg_send(struct PROC_t* current, int dest, MESSAGE_t* m);
-int  msg_receive(struct PROC_t* current, int src, MESSAGE_t* m);
-int  deadlock(int src, int dest);
 
 /*****************************************************************************
  *                                schedule

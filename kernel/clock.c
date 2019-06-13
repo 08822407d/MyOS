@@ -2,10 +2,6 @@
 #include "global.h"
 #include "klib.h"
 
-#define NR_PROCS (NR_TASK_PROCS + NR_USER_PROCS)
-
-void schedule(void);
-
 void clock_handler()
 {
     ++ticks;
@@ -22,32 +18,6 @@ void clock_handler()
     }
 
     schedule();
-}
-
-void schedule()
-{
-    PROC_t *p;
-    unsigned int biggest_ticks = 0;
-
-    while (!biggest_ticks)
-    {
-        for (p = PCB; p < PCB + NR_PROCS; p++)
-        {
-            if (p->ticks > biggest_ticks)
-            {
-                biggest_ticks = p->ticks;
-                p_proc_ready = p;
-            }
-        }
-
-        if (!biggest_ticks)
-        {
-            for (p = PCB; p < PCB + NR_PROCS; p++)
-            {
-                p->ticks = p->priority;
-            }
-        }
-    }
 }
 
 PUBLIC void init_clock()

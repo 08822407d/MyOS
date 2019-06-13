@@ -40,7 +40,7 @@ COBJS		= kernel/global.o kernel/kmain.o kernel/init.o \
 				kernel/clock.o lib/syscall_c.o kernel/proc.o \
 				kernel/keyboard.o kernel/tty.o kernel/console.o \
 				kernel/systask.o \
-				lib/klib_c.o \
+				lib/klib_c.o lib/misc.o \
 				kernel/test_procs.o
 KOBJS		= $(ASMOBJS) $(COBJS)
 

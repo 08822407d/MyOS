@@ -184,14 +184,19 @@ save:
 		push	fs
 		push	gs
 
+		mov		esi,edx
+
 		mov		dx,ss
 		mov		ds,dx
 		mov		es,dx
+		mov		fs,dx
 
-		inc dWORD [k_reenter]
+		mov		edx,esi
+		mov 	esi,esp
+
+		inc 	dWORD [k_reenter]
 		jnz 	set_restart_reenter
 
-		mov 	esi,esp
 		mov 	esp,[ds:k_Stacktop]
 		push	restart
 		xor		ebp,ebp
@@ -286,13 +291,16 @@ exception_entry:
 sys_call:
 	call	save
 	sti
+	push	esi
+	
 	push	dWORD [p_proc_ready]
-
+	push	edx
 	push	ecx
 	push	ebx
 	call	[syscall_table + 4 * eax]
-	add		esp, 4 * 3
+	add		esp, 4 * 4
 
+	pop		esi
 	mov		[esi + EAXREG - STACKBASE],eax
 	cli
 	ret

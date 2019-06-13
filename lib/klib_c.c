@@ -107,6 +107,18 @@ int vsprintf(char *buf, const char *fmt, va_list args)
 	return (p - buf);
 }
 
+/*======================================================================*
+                                 sprintf
+ *======================================================================*/
+int sprintf(char *buf, const char *fmt, ...)
+{
+	va_list arg = (va_list)((char*)(&fmt) + 4);        /* 4 是参数 fmt 所占堆栈中的大小 */
+	return vsprintf(buf, fmt, arg);
+}
+
+/*======================================================================*
+                                 printf
+ *======================================================================*/
 PUBLIC int printf(const char *fmt, ...)
 {
 	int i;
@@ -114,7 +126,7 @@ PUBLIC int printf(const char *fmt, ...)
 
 	va_list arg = (va_list)((char*)(&fmt) + 4); /*4是参数fmt所占堆栈中的大小*/
 	i = vsprintf(buf, fmt, arg);
-	write(buf, i);
+	printx(buf);
 
 	return i;
 }

@@ -8,10 +8,11 @@
         
     EXTERN  void            sys_call();
     EXTERN  void            init_syscall_table();
+    
+    EXTERN  void            sendrec();
+    EXTERN  void            printx();
 
-    #define SC_GET_TICKS    0x00   
-    extern  unsigned int    get_ticks();
-    #define SC_WRITE        0x01
-    extern  unsigned int    write();
+    #define SC_SENDRECV     0x00   
+    #define SC_PRINTX       0x01
 
 #endif /* _SYSCALL_H_ */

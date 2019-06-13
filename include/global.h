@@ -46,10 +46,6 @@ EXTERN	int          	current_console_idx;
 extern	unsigned int    ticks;
 
 /* =============================一次性变量=============================== */
-extern	unsigned int    flag_for_millisecond_ajust;
-extern  unsigned int    start_millisecond_ajusting;
-extern  unsigned int    end_millisecond_ajusting;
-/* =============================一次性变量=============================== */
 /* 宏 */
 /* 线性地址 → 物理地址 */
 #define vir2phys(seg_base, vir)	(u32_t)(((u32_t)seg_base) + (u32_t)(vir))

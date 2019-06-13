@@ -1,5 +1,6 @@
 #linux64 = 0
-macos64 = 0
+#macos64 = 0
+mingw32 = 0
 
 ENTRYPOINT	= 0x0
 ENTRYOFFSET	=   0x0
@@ -13,6 +14,11 @@ ifdef linux64
 endif
 ifdef macos64
 	CROSSCOMPILE = i386-elf-
+endif
+ifdef mingw32
+	CROSSCOMPILE = mingw32-
+	M32CFLAG = -m32
+	M32LDFLAG = -m elf_i386
 endif
 CC		= $(CROSSCOMPILE)gcc
 LD		= $(CROSSCOMPILE)ld
@@ -33,6 +39,7 @@ COBJS		= kernel/global.o kernel/kmain.o kernel/init.o \
 				kernel/interrupt_c.o kernel/i8259_pic.o kernel/protect.o \
 				kernel/clock.o lib/syscall_c.o kernel/proc.o \
 				kernel/keyboard.o kernel/tty.o kernel/console.o \
+				kernel/systask.o \
 				lib/klib_c.o \
 				kernel/test_procs.o
 KOBJS		= $(ASMOBJS) $(COBJS)
